@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:16.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - keycloak_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+        RABBITMQ_DEFAULT_USER: admin
+        RABBITMQ_DEFAULT_PASS: admin
+        RABBITMQ_LOAD_DEFINITIONS: /etc/rabbitmq/definitions.json
+    volumes:
+      - ./rabbit_88522f12e1e0_2024-12-5.json:/opt/definitions.json:ro
+      - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
+    networks:
+      - keycloak_network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 4318:4318
+      - 16686:16686
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
+  keycloak:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: start
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KK_TO_RMQ_URL: rabbitmq
+      KK_TO_RMQ_VHOST: expense-tracker-dev
+      KK_TO_RMQ_USERNAME: keycloak
+      KK_TO_RMQ_PASSWORD: keycloak
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+      - rabbitmq
+      - jaeger
+    networks:
+      - keycloak_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  keycloak_network:
+    driver: bridge
