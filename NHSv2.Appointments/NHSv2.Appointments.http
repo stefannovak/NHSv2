@@ -1,6 +1,4 @@
-@NHSv2.Appointments_HostAddress = http://localhost:5138
-
-GET {{NHSv2.Appointments_HostAddress}}/weatherforecast/
+GET {{baseUrl}}/appointments
 Accept: application/json
 
 ###

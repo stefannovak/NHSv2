@@ -1,0 +1,19 @@
+{
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5000"
+  },
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/appointments",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/appointments",
+      "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+            {
+            "Host": "localhost",
+            "Port": 5001
+            }
+        ]
+    }
+  ]
+}
