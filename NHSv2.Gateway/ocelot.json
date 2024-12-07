@@ -8,12 +8,16 @@
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/appointments",
       "DownstreamScheme": "http",
-        "DownstreamHostAndPorts": [
-            {
-            "Host": "localhost",
-            "Port": 5001
-            }
-        ]
+      "DownstreamHostAndPorts": [
+          {
+          "Host": "localhost",
+          "Port": 5001
+          }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Keycloak",
+        "AllowedScopes": []
+      }
     }
   ]
 }

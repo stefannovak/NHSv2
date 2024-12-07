@@ -1,4 +1,16 @@
-GET http://localhost:5000/api/appointments
-Accept: application/json
+### Get a Doctor bearer token
+POST {{keycloak_base_url}}/realms/NHSv2-doctors-dev/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
 
-###
+grant_type = password &
+client_id = NHSv2-Doctors &
+username = doctor &
+password = doctor &
+client_secret = {{doctor_realm_client_secret}}
+
+> {% client.global.set("auth_token", response.body.json.token); %}
+
+### Get appointments
+GET {{gateway_base_url}}/api/appointments
+Accept: application/json
+Authorization: Bearer {{auth_token}}
