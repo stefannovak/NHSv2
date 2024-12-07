@@ -52,7 +52,7 @@ services:
       KC_DB_USERNAME: ${POSTGRES_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
       KK_TO_RMQ_URL: rabbitmq
-      KK_TO_RMQ_VHOST: expense-tracker-dev
+      KK_TO_RMQ_VHOST: NHSv2-dev
       KK_TO_RMQ_USERNAME: keycloak
       KK_TO_RMQ_PASSWORD: keycloak
     ports:
