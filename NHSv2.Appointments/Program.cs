@@ -12,7 +12,7 @@ builder.Services
     .AddAuthentication("Keycloak")
     .AddJwtBearer("Keycloak", options =>
     {
-        options.Authority = "http://localhost:8080/realms/NHSv2-doctors-dev";
+        options.Authority = "http://localhost:8080/realms/NHSv2-dev";
         options.TokenValidationParameters.ValidateAudience = false;
         options.RequireHttpsMetadata = false;
     });
@@ -22,6 +22,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireAuth", policy =>
     {
         policy.RequireAuthenticatedUser();
+    });
+    
+    options.AddPolicy("Patient", policy =>
+    {
+        policy.RequireRole("patient");
+    });
+    
+    options.AddPolicy("Doctor", policy =>
+    {
+        policy.RequireRole("doctor");
     });
 });
 
@@ -57,7 +67,25 @@ app.MapGet("/appointments", (ClaimsPrincipal claimsPrincipal) =>
     })
     .WithName("GetWeatherForecast")
     .WithOpenApi()
-    .RequireAuthorization("RequireAuth");
+    // require Patient role
+    .RequireAuthorization("Patient");
+
+
+app.MapGet("/appointments-doctor", (ClaimsPrincipal claimsPrincipal) =>
+    {
+        var forecast = Enumerable.Range(1, 5).Select(index =>
+                new WeatherForecast
+                (
+                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    Random.Shared.Next(-20, 55),
+                    summaries[Random.Shared.Next(summaries.Length)]
+                ))
+            .ToArray();
+        return forecast;
+    })
+    .WithName("doctor")
+    .WithOpenApi()
+    .RequireAuthorization("Doctor");
 
 app.Run();
 

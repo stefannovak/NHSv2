@@ -10,7 +10,7 @@ builder.Services
     .AddAuthentication("Keycloak")
     .AddJwtBearer("Keycloak", options =>
     {
-        options.Authority = "http://localhost:8080/realms/NHSv2-doctors-dev";
+        options.Authority = "http://localhost:8080/realms/NHSv2-dev";
         options.TokenValidationParameters.ValidateAudience = false;
         options.RequireHttpsMetadata = false;
     });

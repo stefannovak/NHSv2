@@ -17,6 +17,28 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Keycloak",
         "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "role": ["patient"]
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/appointments-doctor",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/appointments-doctor",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Keycloak",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "roles": ["doctor"]
       }
     }
   ]
