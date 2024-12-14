@@ -1,4 +1,0 @@
-GET {{baseUrl}}/appointments
-Accept: application/json
-
-###

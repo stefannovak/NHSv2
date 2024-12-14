@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.API", "NHSv2.Appointments.API\NHSv2.Appointments.API.csproj", "{A1CBD058-A2CD-4B14-B806-F959165D647A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments/src/NHSv2.Appointments.API", "NHSv2.Appointments/src/NHSv2.Appointments.API\NHSv2.Appointments.API.csproj", "{A1CBD058-A2CD-4B14-B806-F959165D647A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Gateway", "NHSv2.Gateway\NHSv2.Gateway.csproj", "{86A3F589-BB14-40FB-A3F1-14767C7DB9DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.Infrastructure", "NHSv2.Appointments.Infrastructure\NHSv2.Appointments.Infrastructure.csproj", "{70AEAE99-427B-40E0-A17C-1A9982783A3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments/src/NHSv2.Appointments.Infrastructure", "NHSv2.Appointments/src/NHSv2.Appointments.Infrastructure\NHSv2.Appointments.Infrastructure.csproj", "{70AEAE99-427B-40E0-A17C-1A9982783A3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.Application", "NHSv2.Appointments.Application\NHSv2.Appointments.Application.csproj", "{4DAC731F-A241-45D5-92D3-955611FFF099}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments/src/NHSv2.Appointments.Application", "NHSv2.Appointments/src/NHSv2.Appointments.Application\NHSv2.Appointments.Application.csproj", "{4DAC731F-A241-45D5-92D3-955611FFF099}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

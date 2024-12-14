@@ -4,9 +4,9 @@
   },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/api/appointments",
+      "UpstreamPathTemplate": "/api/appointments/patient",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/appointments",
+      "DownstreamPathTemplate": "/api/appointments",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
           {
@@ -23,9 +23,9 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/api/appointments-doctor",
+      "UpstreamPathTemplate": "/api/appointments/doctor",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/appointments-doctor",
+      "DownstreamPathTemplate": "/api/appointments/doctor",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

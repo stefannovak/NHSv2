@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace NHSv2.Appointments.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AppointmentsController(EventStoreClient eventStoreClient) : ControllerBase
 {
     [Authorize(Roles = "patient")]
-    [HttpGet("/appointments")]
+    [HttpGet]
     public async Task<ActionResult> Get()
     {
         for (var i = 0; i < 100; i++)
@@ -34,6 +34,13 @@ public class AppointmentsController(EventStoreClient eventStoreClient) : Control
             );
         }
         
+        return Ok();
+    }
+
+    [Authorize(Roles = "doctor")]
+    [HttpGet("doctor")]
+    public async Task<ActionResult> GetDoctor()
+    {
         return Ok();
     }
 }
