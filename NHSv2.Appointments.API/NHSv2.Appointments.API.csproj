@@ -5,9 +5,11 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <RootNamespace>NHSv2.Appointments</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.7" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
@@ -18,5 +20,6 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
+
 
 </Project>
