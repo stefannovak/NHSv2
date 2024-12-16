@@ -1,3 +1,4 @@
+using System.Data.SqlClient;
 using System.Text.Json;
 using EventStore.Client;
 using NHSv2.Appointments.Domain.Appointments;
@@ -8,6 +9,7 @@ namespace NHSv2.Appointments.EventStoreWorker;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly string _connectionString = "Server=localhost,5434;Database=master;User Id=sa;Password=Password123!;";
 
     public Worker(ILogger<Worker> logger)
     {
@@ -50,13 +52,43 @@ public class Worker : BackgroundService
     
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
     {
-        var appointment = JsonSerializer.Deserialize<Appointment>(evnt.Event.Data.Span);
-        Console.WriteLine($"Handling appointment created: {appointment.Id}");
+        var appointmentCreatedEvent = JsonSerializer.Deserialize<AppointmentCreatedEvent>(evnt.Event.Data.Span);
+        Console.WriteLine($"Handling appointment created: {appointmentCreatedEvent.Appointment.Id}");
+        await InsertAppointmentToDatabase(appointmentCreatedEvent.Appointment);
     }
     
     private async Task HandleAppointmentUpdatedEvent(ResolvedEvent evnt)
     {
-        var appointment = JsonSerializer.Deserialize<Appointment>(evnt.Event.Data.Span);
-        Console.WriteLine($"Handling appointment updated: {appointment.Id}");
+        var appointmentUpdatedEvent = JsonSerializer.Deserialize<AppointmentUpdatedEvent>(evnt.Event.Data.Span);
+        Console.WriteLine($"Handling appointment updated: {appointmentUpdatedEvent.id}");
+        await UpdateAppointmentInDatabase(new Appointment(appointmentUpdatedEvent.id, appointmentUpdatedEvent.testUpdate));
+    }
+    
+    private async Task InsertAppointmentToDatabase(Appointment appointment)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var command = new SqlCommand("INSERT INTO Appointments (Id, Test) VALUES (@Id, @Test)", connection);
+            command.Parameters.AddWithValue("@Id", appointment.Id);
+            command.Parameters.AddWithValue("@Test", appointment.Test);
+            await command.ExecuteNonQueryAsync();
+        }
+
+        _logger.LogInformation($"Inserted appointment {appointment.Id} to database");
+    }
+
+    private async Task UpdateAppointmentInDatabase(Appointment appointment)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var command = new SqlCommand("UPDATE Appointments SET Test = @Test WHERE Id = @Id", connection);
+            command.Parameters.AddWithValue("@Id", appointment.Id);
+            command.Parameters.AddWithValue("@Test", appointment.Test);
+            await command.ExecuteNonQueryAsync();
+        }
+
+        _logger.LogInformation($"Updated appointment {appointment.Id} in database");
     }
 }

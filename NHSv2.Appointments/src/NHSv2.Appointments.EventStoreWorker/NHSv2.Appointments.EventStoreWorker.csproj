@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.7" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>

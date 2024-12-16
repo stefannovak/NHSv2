@@ -84,6 +84,14 @@ services:
       - type: volume
         source: eventstore-volume-logs
         target: /var/log/eventstore
+        
+  appointments.db.reads:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - SA_PASSWORD=Password123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "5434:1433"
       
 volumes:
   postgres_data:
