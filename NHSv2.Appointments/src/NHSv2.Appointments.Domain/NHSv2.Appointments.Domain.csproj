@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NHSv2.Appointments.Application\NHSv2.Appointments.Application.csproj" />
-    </ItemGroup>
-
 </Project>

@@ -2,6 +2,8 @@ using System.Text.Json;
 using EventStore.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NHSv2.Appointments.Domain.Appointments;
+using NHSv2.Appointments.Domain.Appointments.Events;
 
 namespace NHSv2.Appointments.Controllers;
 
@@ -9,30 +11,41 @@ namespace NHSv2.Appointments.Controllers;
 [Route("api/[controller]")]
 public class AppointmentsController(EventStoreClient eventStoreClient) : ControllerBase
 {
-    [Authorize(Roles = "patient")]
+    // [Authorize(Roles = "patient")]
     [HttpGet]
     public async Task<ActionResult> Get()
     {
-        for (var i = 0; i < 100; i++)
-        {
-            var evt = new {
-                EntityId      = Guid.NewGuid().ToString("N"),
-                ImportantData = $"I wrote my first event! {i}"
-            };
+        var appointmentId = Guid.NewGuid();
+        var appointmentCreatedEvent = new AppointmentCreatedEvent(new Appointment(appointmentId, "Test"));
+        
+        var eventData = new EventData(
+            Uuid.NewUuid(),
+            nameof(AppointmentCreatedEvent),
+            JsonSerializer.SerializeToUtf8Bytes(appointmentCreatedEvent)
+        );
+        
+        await eventStoreClient.AppendToStreamAsync(
+            "appointments",
+            StreamState.Any,
+            new[] { eventData },
+            cancellationToken: new CancellationToken()
+        );
+        
+        Thread.Sleep(5000);
 
-            var eventData = new EventData(
-                Uuid.NewUuid(),
-                "TestEvent",
-                JsonSerializer.SerializeToUtf8Bytes(evt)
-            );
-            
-            await eventStoreClient.AppendToStreamAsync(
-                "some-stream",
-                StreamState.Any,
-                new[] { eventData },
-                cancellationToken: new CancellationToken()
-            );
-        }
+        var appointmentUpdatedEvent = new AppointmentUpdatedEvent(appointmentId, "TestUpdate");
+        var eventData2 = new EventData(
+            Uuid.NewUuid(),
+            nameof(AppointmentUpdatedEvent),
+            JsonSerializer.SerializeToUtf8Bytes(appointmentUpdatedEvent)
+        );
+        
+        await eventStoreClient.AppendToStreamAsync(
+            "appointments",
+            StreamState.Any,
+            new[] { eventData2 },
+            cancellationToken: new CancellationToken()
+        );
         
         return Ok();
     }

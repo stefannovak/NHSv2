@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments/src/NHSv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.Application.Tests", "NHSv2.Appointments\tests\NHSv2.Appointments.Application.Tests\NHSv2.Appointments.Application.Tests.csproj", "{2AA84C5A-992E-4705-8735-62C72190E3DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.EventStoreWorker", "NHSv2.Appointments\src\NHSv2.Appointments.EventStoreWorker\NHSv2.Appointments.EventStoreWorker.csproj", "{5FACEF5C-234D-4752-AF70-0C54EDE0560F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Appointments.Domain", "NHSv2.Appointments\src\NHSv2.Appointments.Domain\NHSv2.Appointments.Domain.csproj", "{C3FECB77-EDD0-4B17-9D73-1DF3DF05F9E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{2AA84C5A-992E-4705-8735-62C72190E3DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA84C5A-992E-4705-8735-62C72190E3DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA84C5A-992E-4705-8735-62C72190E3DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FACEF5C-234D-4752-AF70-0C54EDE0560F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FACEF5C-234D-4752-AF70-0C54EDE0560F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FACEF5C-234D-4752-AF70-0C54EDE0560F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FACEF5C-234D-4752-AF70-0C54EDE0560F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FECB77-EDD0-4B17-9D73-1DF3DF05F9E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FECB77-EDD0-4B17-9D73-1DF3DF05F9E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FECB77-EDD0-4B17-9D73-1DF3DF05F9E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FECB77-EDD0-4B17-9D73-1DF3DF05F9E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
