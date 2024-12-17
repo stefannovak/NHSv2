@@ -1,6 +1,5 @@
+using System.Reflection;
 using EventStore.Client;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +16,8 @@ builder.Services
         options.TokenValidationParameters.ValidateAudience = false;
         options.RequireHttpsMetadata = false;
     });
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Load("NHSv2.Appointments.Application")));
 
 builder.Services.AddAuthorization(options =>
 {

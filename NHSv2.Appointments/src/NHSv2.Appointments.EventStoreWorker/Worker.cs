@@ -25,7 +25,6 @@ public class Worker : BackgroundService
         await using var subscription = eventStoreClient.SubscribeToStream(
             "appointments",
             FromStream.Start,
-            // EventAppeared(),
             cancellationToken: stoppingToken);
         
         await foreach (var message in subscription.Messages.WithCancellation(stoppingToken)) {
