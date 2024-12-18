@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
+using NHSv2.Appointments.Application.Appointments.Commands.UpdateAppointment;
 
 namespace NHSv2.Appointments.Controllers;
 
@@ -27,21 +28,11 @@ public class AppointmentsController : ControllerBase
         var appointmentId = Guid.NewGuid();
         var appointmentCreatedCommand = new CreateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
         await _mediator.Send(appointmentCreatedCommand);
-
-        // var appointmentUpdatedEvent = new AppointmentUpdatedEvent(appointmentId, words[random.Next(0, words.Count)]);
-        // var eventData2 = new EventData(
-        //     Uuid.NewUuid(),
-        //     nameof(AppointmentUpdatedEvent),
-        //     JsonSerializer.SerializeToUtf8Bytes(appointmentUpdatedEvent)
-        // );
-        //
-        // await eventStoreClient.AppendToStreamAsync(
-        //     "appointments",
-        //     StreamState.Any,
-        //     new[] { eventData2 },
-        //     cancellationToken: new CancellationToken()
-        // );
         
+        Thread.Sleep(5000);
+        var appointmentUpdatedCommand = new UpdateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
+        await _mediator.Send(appointmentUpdatedCommand);
+
         return Created();
     }
 
