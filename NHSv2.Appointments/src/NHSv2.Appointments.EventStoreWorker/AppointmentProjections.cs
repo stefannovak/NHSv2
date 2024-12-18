@@ -6,12 +6,13 @@ using NHSv2.Appointments.Domain.Appointments.Events;
 
 namespace NHSv2.Appointments.EventStoreWorker;
 
-public class Worker : BackgroundService
+public class AppointmentProjections : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<AppointmentProjections> _logger;
     private readonly string _connectionString = "Server=localhost,5434;Database=master;User Id=sa;Password=Password123!;";
-
-    public Worker(ILogger<Worker> logger)
+    private const string STREAM_NAME = "appointments";
+    
+    public AppointmentProjections(ILogger<AppointmentProjections> logger)
     {
         _logger = logger;
     }
@@ -22,9 +23,11 @@ public class Worker : BackgroundService
         var settings = EventStoreClientSettings.Create(connectionString);
         var eventStoreClient = new EventStoreClient(settings);
 
+        var checkpoint = await GetCheckpoint();
+
         await using var subscription = eventStoreClient.SubscribeToStream(
-            "appointments",
-            FromStream.Start,
+            STREAM_NAME,
+            FromStream.After(new StreamPosition(Convert.ToUInt32(checkpoint))),
             cancellationToken: stoppingToken);
         
         await foreach (var message in subscription.Messages.WithCancellation(stoppingToken)) {
@@ -33,6 +36,18 @@ public class Worker : BackgroundService
                     await HandleEvent(evnt);
                     break;
             }
+        }
+    }
+
+    private async Task<long> GetCheckpoint()
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var command = new SqlCommand("SELECT Position FROM Checkpoints WHERE StreamName = @StreamName", connection);
+            command.Parameters.AddWithValue("@StreamName", STREAM_NAME);
+            var result = await command.ExecuteScalarAsync();
+            return result is DBNull ? 0 : (long) result;
         }
     }
 
@@ -47,6 +62,8 @@ public class Worker : BackgroundService
                 await HandleAppointmentUpdatedEvent(evnt);
                 break;
         }
+        
+        await IncrementCheckpoint();
     }
     
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
@@ -89,5 +106,16 @@ public class Worker : BackgroundService
         }
 
         _logger.LogInformation($"Updated appointment {appointment.Id} in database");
+    }
+
+    private async Task IncrementCheckpoint()
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var command = new SqlCommand("UPDATE Checkpoints SET Position = Position + 1 WHERE StreamName = @StreamName", connection);
+            command.Parameters.AddWithValue("@StreamName", STREAM_NAME);
+            await command.ExecuteNonQueryAsync();
+        }
     }
 }

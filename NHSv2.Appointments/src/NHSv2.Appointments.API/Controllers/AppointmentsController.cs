@@ -23,27 +23,24 @@ public class AppointmentsController : ControllerBase
         // random list of words
         var words = new List<string> { "Test", "Test2", "Test3", "Test4", "Test5" };
         var random = new Random();
-        
-        for (var i = 0; i < 100; i++)
-        {
-            var appointmentId = Guid.NewGuid();
-            var appointmentCreatedCommand = new CreateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
-            await _mediator.Send(appointmentCreatedCommand);
 
-            // var appointmentUpdatedEvent = new AppointmentUpdatedEvent(appointmentId, words[random.Next(0, words.Count)]);
-            // var eventData2 = new EventData(
-            //     Uuid.NewUuid(),
-            //     nameof(AppointmentUpdatedEvent),
-            //     JsonSerializer.SerializeToUtf8Bytes(appointmentUpdatedEvent)
-            // );
-            //
-            // await eventStoreClient.AppendToStreamAsync(
-            //     "appointments",
-            //     StreamState.Any,
-            //     new[] { eventData2 },
-            //     cancellationToken: new CancellationToken()
-            // );
-        }
+        var appointmentId = Guid.NewGuid();
+        var appointmentCreatedCommand = new CreateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
+        await _mediator.Send(appointmentCreatedCommand);
+
+        // var appointmentUpdatedEvent = new AppointmentUpdatedEvent(appointmentId, words[random.Next(0, words.Count)]);
+        // var eventData2 = new EventData(
+        //     Uuid.NewUuid(),
+        //     nameof(AppointmentUpdatedEvent),
+        //     JsonSerializer.SerializeToUtf8Bytes(appointmentUpdatedEvent)
+        // );
+        //
+        // await eventStoreClient.AppendToStreamAsync(
+        //     "appointments",
+        //     StreamState.Any,
+        //     new[] { eventData2 },
+        //     cancellationToken: new CancellationToken()
+        // );
         
         return Created();
     }
