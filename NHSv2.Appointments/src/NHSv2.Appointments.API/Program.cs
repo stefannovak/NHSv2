@@ -52,10 +52,4 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-
-// app.MapGet("/appointments-doctor", () => Results.Ok())
-//     .WithName("Doctor")
-//     .WithOpenApi()
-//     .RequireAuthorization("Doctor");
-
 app.Run();

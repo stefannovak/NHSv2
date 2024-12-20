@@ -17,7 +17,7 @@ public class AppointmentsController : ControllerBase
         _mediator = mediator;
     }
     
-    // [Authorize(Roles = "patient")]
+    [Authorize(Roles = "patient")]
     [HttpGet]
     public async Task<ActionResult> Get()
     {
