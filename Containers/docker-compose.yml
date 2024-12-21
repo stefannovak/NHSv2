@@ -92,6 +92,10 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "5434:1433"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
       
 volumes:
   postgres_data:

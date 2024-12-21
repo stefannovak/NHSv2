@@ -10,4 +10,26 @@
       <ProjectReference Include="..\NHSv2.Appointments.Application\NHSv2.Appointments.Application.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Services\Contracts\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="EventStore.Client">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc\23.3.7\lib\net8.0\EventStore.Client.dll</HintPath>
+      </Reference>
+      <Reference Include="EventStore.Client.Streams">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc.streams\23.3.7\lib\net8.0\EventStore.Client.Streams.dll</HintPath>
+      </Reference>
+      <Reference Include="EventStore.Client.Streams">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc.streams\23.3.7\lib\net8.0\EventStore.Client.Streams.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="EventStore.Client">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc\23.3.7\lib\net8.0\EventStore.Client.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

@@ -1,3 +1,4 @@
+using EventStore.Client;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,5 +23,13 @@ public static class ServiceCollectionExtensions
         });
         
         return services;
+    }
+    
+    public static IServiceCollection AddEventStore(this IServiceCollection serviceCollection, string connectionString)
+    {
+        var settings = EventStoreClientSettings.Create(connectionString);
+        var eventStoreClient = new EventStoreClient(settings);
+        serviceCollection.AddSingleton(eventStoreClient);
+        return serviceCollection;
     }
 }

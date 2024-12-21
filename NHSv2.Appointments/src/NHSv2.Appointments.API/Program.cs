@@ -1,5 +1,4 @@
 using System.Reflection;
-using EventStore.Client;
 using NHSv2.Appointments.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,10 +34,8 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddInfrastructureServices();
 
-const string connectionString = "esdb://localhost:2113?tls=false&tlsVerifyCert=false";
-var settings = EventStoreClientSettings.Create(connectionString);
-var eventStoreClient = new EventStoreClient(settings);
-builder.Services.AddSingleton(eventStoreClient);
+// TODO: - API doesn't need the EventStore, but Application does, does API need to provide a connection string?
+builder.Services.AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
 var app = builder.Build();
 

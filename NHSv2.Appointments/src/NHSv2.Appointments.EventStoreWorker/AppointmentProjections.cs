@@ -9,23 +9,24 @@ namespace NHSv2.Appointments.EventStoreWorker;
 public class AppointmentProjections : BackgroundService
 {
     private readonly ILogger<AppointmentProjections> _logger;
+    private readonly EventStoreClient _eventStoreClient;
+    // Left temporarily before EF is integrated.
     private readonly string _connectionString = "Server=localhost,5434;Database=master;User Id=sa;Password=Password123!;";
     private const string STREAM_NAME = "appointments";
     
-    public AppointmentProjections(ILogger<AppointmentProjections> logger)
+    public AppointmentProjections(
+        ILogger<AppointmentProjections> logger,
+        EventStoreClient eventStoreClient)
     {
         _logger = logger;
+        _eventStoreClient = eventStoreClient;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        const string connectionString = "esdb://localhost:2113?tls=false&tlsVerifyCert=false";
-        var settings = EventStoreClientSettings.Create(connectionString);
-        var eventStoreClient = new EventStoreClient(settings);
-
         var checkpoint = await GetCheckpoint();
 
-        await using var subscription = eventStoreClient.SubscribeToStream(
+        await using var subscription = _eventStoreClient.SubscribeToStream(
             STREAM_NAME,
             FromStream.After(new StreamPosition(Convert.ToUInt32(checkpoint))),
             cancellationToken: stoppingToken);

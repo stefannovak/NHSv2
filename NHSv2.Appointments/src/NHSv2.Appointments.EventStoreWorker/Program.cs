@@ -1,13 +1,15 @@
 using System.Data.SqlClient;
 using NHSv2.Appointments.EventStoreWorker;
+using NHSv2.Appointments.Infrastructure;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<AppointmentProjections>();
+builder.Services.AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
 var host = builder.Build();
 
 // Seed database
-await using (var connection = new SqlConnection("Server=localhost,5434;Database=master;User Id=sa;Password=Password123!;"))
+await using (var connection = new SqlConnection(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!))
 {
     await connection.OpenAsync();
     

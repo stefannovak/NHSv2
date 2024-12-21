@@ -30,6 +30,10 @@ public class EmailService : IEmailService
 
     public async Task SendEmail(string destinationAddress, string subject, string plaintextMessageContent)
     {
+        // Don't want to actually send emails all the time in development.
+        _logger.LogDebug("Email sending disabled in development.");
+        return;
+        
         var message = new SendGridMessage
         {
             From = new EmailAddress(_sendGridOptions.Value.FromAddress, "NHSv2"),

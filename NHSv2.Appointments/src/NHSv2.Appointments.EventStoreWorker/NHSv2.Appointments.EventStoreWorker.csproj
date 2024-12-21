@@ -22,5 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NHSv2.Appointments.Domain\NHSv2.Appointments.Domain.csproj" />
+      <ProjectReference Include="..\NHSv2.Appointments.Infrastructure\NHSv2.Appointments.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

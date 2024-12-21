@@ -28,10 +28,6 @@ public class AppointmentsController : ControllerBase
         var appointmentId = Guid.NewGuid();
         var appointmentCreatedCommand = new CreateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
         await _mediator.Send(appointmentCreatedCommand);
-        
-        Thread.Sleep(5000);
-        var appointmentUpdatedCommand = new UpdateAppointmentCommand(appointmentId, words[random.Next(0, words.Count)]);
-        await _mediator.Send(appointmentUpdatedCommand);
 
         return Created();
     }

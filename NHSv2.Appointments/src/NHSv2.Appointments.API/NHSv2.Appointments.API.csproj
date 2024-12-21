@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <!--   Required by Application, can remove?     -->
         <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.7" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
