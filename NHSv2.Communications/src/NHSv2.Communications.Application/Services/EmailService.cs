@@ -28,36 +28,37 @@ public class EmailService : IEmailService
 
     private SendGridClient Client { get; }
 
-    public async Task SendEmail(string destinationAddress, string subject, string plaintextMessageContent)
+    public async Task<bool> SendEmail(string destinationAddress, string subject, string htmlContent)
     {
-        // Don't want to actually send emails all the time in development.
-        _logger.LogDebug("Email sending disabled in development.");
-        return;
-        
         var message = new SendGridMessage
         {
             From = new EmailAddress(_sendGridOptions.Value.FromAddress, "NHSv2"),
         };
         message.AddTo(destinationAddress);
         message.Subject = subject;
-        message.PlainTextContent = plaintextMessageContent;
-        await TrySendEmail(message);
+        message.HtmlContent = htmlContent;
+        return await TrySendEmail(message);
     }
 
-    private async Task TrySendEmail(SendGridMessage message)
+    private async Task<bool> TrySendEmail(SendGridMessage message)
     {
         try
         {
             var response = await Client.SendEmailAsync(message);
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var body = await response.Body.ReadAsStringAsync();
-                _logger.LogError($"Error sending SendGrid email: {body}");
+                return true;
             }
+
+            var body = await response.Body.ReadAsStringAsync();
+            _logger.LogError($"Error sending SendGrid email: {body}");
+            return false;
+
         }
         catch (Exception e)
         {
             _logger.LogError($"Failed to send email. Error: {e.Message}");
+            return false;
         }
     }
 }

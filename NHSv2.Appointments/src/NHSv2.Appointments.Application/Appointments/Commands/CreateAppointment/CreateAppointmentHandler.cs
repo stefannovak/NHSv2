@@ -34,6 +34,6 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             cancellationToken: new CancellationToken()
         );
 
-        await _bus.Publish(new AppointmentCreatedContract(request.Id), cancellationToken);
+        await _bus.Publish(new AppointmentCreatedContract(request.Id, "Test", "<p>Appointment created.</p>"), cancellationToken);
     }
 }

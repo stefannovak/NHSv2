@@ -1,6 +1,7 @@
 using EventStore.Client;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using NHSv2.Appointments.Application.Consumers;
 
 namespace NHSv2.Appointments.Infrastructure;
 
@@ -10,6 +11,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddMassTransit(x =>
         {
+            x.AddConsumer<AppointmentEmailSentConsumer>();
+            
             x.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host("localhost", "/", h =>

@@ -7,7 +7,7 @@ public interface IEmailService
     /// </summary>
     /// <param name="destinationAddress"></param>
     /// <param name="subject"></param>
-    /// <param name="plaintextMessageContent"></param>
-    /// <returns></returns>
-    public Task SendEmail(string destinationAddress, string subject, string plaintextMessageContent);
+    /// <param name="htmlContent"></param>
+    /// <returns>Success or failure.</returns>
+    public Task<bool> SendEmail(string destinationAddress, string subject, string htmlContent);
 }
