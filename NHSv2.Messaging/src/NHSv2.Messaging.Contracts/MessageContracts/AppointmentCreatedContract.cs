@@ -1,3 +1,3 @@
-namespace NHSv2.Communications.Contracts.MessageContracts;
+namespace NHSv2.Messaging.Contracts.MessageContracts;
 
 public record AppointmentCreatedContract(Guid AppointmentId);

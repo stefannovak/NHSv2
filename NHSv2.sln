@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Communications.Worker
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Communications.Infrastructure", "NHSv2.Communications\src\NHSv2.Communications.Infrastructure\NHSv2.Communications.Infrastructure.csproj", "{EF35DDD8-4C88-4CA6-8E84-369AB4B4AED2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Communications.Contracts", "NHSv2.Communications\src\NHSv2.Communications.Contracts\NHSv2.Communications.Contracts.csproj", "{6130114F-2068-4691-8674-2CFE2FC5EC90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Messaging.Contracts", "NHSv2.Messaging\src\NHSv2.Messaging.Contracts\NHSv2.Messaging.Contracts.csproj", "{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,9 +68,9 @@ Global
 		{EF35DDD8-4C88-4CA6-8E84-369AB4B4AED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF35DDD8-4C88-4CA6-8E84-369AB4B4AED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF35DDD8-4C88-4CA6-8E84-369AB4B4AED2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6130114F-2068-4691-8674-2CFE2FC5EC90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6130114F-2068-4691-8674-2CFE2FC5EC90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6130114F-2068-4691-8674-2CFE2FC5EC90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6130114F-2068-4691-8674-2CFE2FC5EC90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

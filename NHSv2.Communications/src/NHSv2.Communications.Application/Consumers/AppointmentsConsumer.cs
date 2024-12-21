@@ -1,5 +1,5 @@
 using MassTransit;
-using NHSv2.Communications.Contracts.MessageContracts;
+using NHSv2.Messaging.Contracts.MessageContracts;
 
 namespace NHSv2.Communications.Application.Consumers;
 

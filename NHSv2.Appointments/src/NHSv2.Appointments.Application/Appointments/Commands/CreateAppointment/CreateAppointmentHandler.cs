@@ -4,7 +4,7 @@ using MassTransit;
 using MediatR;
 using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Domain.Appointments.Events;
-using NHSv2.Communications.Contracts.MessageContracts;
+using NHSv2.Messaging.Contracts.MessageContracts;
 
 namespace NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
 

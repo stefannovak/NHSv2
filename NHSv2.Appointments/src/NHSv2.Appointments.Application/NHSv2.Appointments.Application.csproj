@@ -30,7 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\NHSv2.Communications\src\NHSv2.Communications.Contracts\NHSv2.Communications.Contracts.csproj" />
+      <ProjectReference Include="..\..\..\NHSv2.Messaging\src\NHSv2.Messaging.Contracts\NHSv2.Messaging.Contracts.csproj" />
       <ProjectReference Include="..\NHSv2.Appointments.Domain\NHSv2.Appointments.Domain.csproj" />
     </ItemGroup>
 
