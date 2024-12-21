@@ -12,7 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.4.1" />
+        <PackageReference Include="MassTransit.Abstractions" Version="8.3.4" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
+        <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,10 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\NHSv2.Appointments.Domain\NHSv2.Appointments.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\..\..\NHSv2.Communications\src\NHSv2.Communications.Contracts\NHSv2.Communications.Contracts.csproj" />
       <ProjectReference Include="..\NHSv2.Appointments.Domain\NHSv2.Appointments.Domain.csproj" />
     </ItemGroup>
 

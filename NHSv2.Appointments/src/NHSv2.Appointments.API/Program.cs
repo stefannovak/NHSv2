@@ -1,5 +1,6 @@
 using System.Reflection;
 using EventStore.Client;
+using NHSv2.Appointments.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,8 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("doctor");
     });
 });
+
+builder.Services.AddInfrastructureServices();
 
 const string connectionString = "esdb://localhost:2113?tls=false&tlsVerifyCert=false";
 var settings = EventStoreClientSettings.Create(connectionString);
