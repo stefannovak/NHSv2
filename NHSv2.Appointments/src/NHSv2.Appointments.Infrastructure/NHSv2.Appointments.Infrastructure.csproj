@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services\Contracts\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="EventStore.Client">
         <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc\23.3.7\lib\net8.0\EventStore.Client.dll</HintPath>
       </Reference>

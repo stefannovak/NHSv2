@@ -66,7 +66,7 @@ public class AppointmentProjections : BackgroundService
         
         await IncrementCheckpoint();
     }
-    
+
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
     {
         var appointmentCreatedEvent = JsonSerializer.Deserialize<AppointmentCreatedEvent>(evnt.Event.Data.Span);

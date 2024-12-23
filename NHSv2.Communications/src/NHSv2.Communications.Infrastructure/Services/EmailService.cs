@@ -5,7 +5,7 @@ using NHSv2.Communications.Application.Services.Contracts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace NHSv2.Communications.Application.Services;
+namespace NHSv2.Communications.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {
