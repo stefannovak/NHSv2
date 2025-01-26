@@ -487,3 +487,4 @@ $RECYCLE.BIN/
 **/obj/
 **/bin/
 **/appsettings.Development.json
+/Secrets

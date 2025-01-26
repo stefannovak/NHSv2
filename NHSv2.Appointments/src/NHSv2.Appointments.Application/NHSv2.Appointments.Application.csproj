@@ -9,9 +9,12 @@
 
     <ItemGroup>
       <Folder Include="Appointments\Queries\" />
+      <Folder Include="Configuration\" />
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+        <PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3592" />
         <PackageReference Include="MassTransit.Abstractions" Version="8.3.4" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
         <PackageReference Include="MediatR" Version="12.4.1" />

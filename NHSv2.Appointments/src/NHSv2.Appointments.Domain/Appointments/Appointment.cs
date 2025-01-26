@@ -6,9 +6,15 @@ public class Appointment
 
     public string Test { get; set; }
 
-    public Appointment(Guid id, string test)
+    /// <summary>
+    /// Currently this is a Google Calendar Event id.
+    /// </summary>
+    public string AppointmentId { get; init; }
+
+    public Appointment(Guid id, string test, string appointmentId)
     {
         Id = id;
         Test = test;
+        AppointmentId = appointmentId;
     }
 }

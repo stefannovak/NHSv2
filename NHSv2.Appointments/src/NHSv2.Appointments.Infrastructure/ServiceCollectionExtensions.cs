@@ -2,6 +2,8 @@ using EventStore.Client;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Appointments.Application.Consumers;
+using NHSv2.Appointments.Application.Services.Contracts;
+using NHSv2.Appointments.Infrastructure.Services;
 
 namespace NHSv2.Appointments.Infrastructure;
 
@@ -17,13 +19,15 @@ public static class ServiceCollectionExtensions
             {
                 cfg.Host("localhost", "/", h =>
                 {
-                    h.Username("guest");
-                    h.Password("guest");
+                    h.Username("appointments");
+                    h.Password("appointments");
                 });
                 
                 cfg.ConfigureEndpoints(context);
             });
         });
+        
+        services.AddTransient<ICalendarService, GoogleCalendarService>();
         
         return services;
     }

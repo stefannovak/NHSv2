@@ -1,4 +1,5 @@
 using System.Reflection;
+using NHSv2.Appointments.Application;
 using NHSv2.Appointments.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 
 // TODO: - API doesn't need the EventStore, but Application does, does API need to provide a connection string?

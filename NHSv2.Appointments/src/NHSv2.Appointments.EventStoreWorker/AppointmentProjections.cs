@@ -78,7 +78,7 @@ public class AppointmentProjections : BackgroundService
     {
         var appointmentUpdatedEvent = JsonSerializer.Deserialize<AppointmentUpdatedEvent>(evnt.Event.Data.Span);
         Console.WriteLine($"Handling appointment updated: {appointmentUpdatedEvent.id}");
-        await UpdateAppointmentInDatabase(new Appointment(appointmentUpdatedEvent.id, appointmentUpdatedEvent.testUpdate));
+        await UpdateAppointmentInDatabase(new Appointment(appointmentUpdatedEvent.id, appointmentUpdatedEvent.testUpdate, ""));
     }
     
     private async Task InsertAppointmentToDatabase(Appointment appointment)
