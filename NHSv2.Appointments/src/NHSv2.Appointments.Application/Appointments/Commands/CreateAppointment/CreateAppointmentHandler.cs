@@ -33,23 +33,23 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             DateTime.Now,
             string.Empty);
         
-        var eventData = new EventData(
-            Uuid.NewUuid(),
-            nameof(AppointmentCreatedEvent),
-            JsonSerializer.SerializeToUtf8Bytes(new AppointmentCreatedEvent(new Appointment(request.Id, request.Test, createdCalendarEvent.Id)))
-        );
-            
-        await _eventStoreClient.AppendToStreamAsync(
-            "appointments",
-            StreamState.Any,
-            new[] { eventData },
-            cancellationToken: new CancellationToken()
-        );
-
-        await _bus.Publish(new AppointmentCreatedContract(
-            request.Id,
-            "Test",
-            $"<p>Appointment created.</p><a href='{createdCalendarEvent.HtmlLink}'>View appointment</a>"),
-            cancellationToken);
+        // var eventData = new EventData(
+        //     Uuid.NewUuid(),
+        //     nameof(AppointmentCreatedEvent),
+        //     JsonSerializer.SerializeToUtf8Bytes(new AppointmentCreatedEvent(new Appointment(request.Id, request.Test, createdCalendarEvent.Id)))
+        // );
+        //     
+        // await _eventStoreClient.AppendToStreamAsync(
+        //     "appointments",
+        //     StreamState.Any,
+        //     new[] { eventData },
+        //     cancellationToken: new CancellationToken()
+        // );
+        //
+        // await _bus.Publish(new AppointmentCreatedContract(
+        //     request.Id,
+        //     "Test",
+        //     $"<p>Appointment created.</p><a href='{createdCalendarEvent.HtmlLink}'>View appointment</a>"),
+        //     cancellationToken);
     }
 }
