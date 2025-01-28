@@ -28,15 +28,15 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
     public async Task Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
         var createdCalendarEvent = await _calendarService.CreateAppointmentAsync(
-            "Appointment at Clinic with Dr",
-            "Very important",
+            request.Summary,
+            request.Description,
             DateTime.Now,
             string.Empty);
         
         var eventData = new EventData(
             Uuid.NewUuid(),
             nameof(AppointmentCreatedEvent),
-            JsonSerializer.SerializeToUtf8Bytes(new AppointmentCreatedEvent(new Appointment(request.Id, request.Test, createdCalendarEvent.Id)))
+            JsonSerializer.SerializeToUtf8Bytes(new AppointmentCreatedEvent(new Appointment(Guid.NewGuid(),  Guid.NewGuid().ToString(), createdCalendarEvent.Id)))
         );
             
         await _eventStoreClient.AppendToStreamAsync(
@@ -45,9 +45,9 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             new[] { eventData },
             cancellationToken: new CancellationToken()
         );
-
+        
         await _bus.Publish(new AppointmentCreatedContract(
-            request.Id,
+            Guid.NewGuid(),
             "Test",
             $"<p>Appointment created.</p><a href='{createdCalendarEvent.HtmlLink}'>View appointment</a>"),
             cancellationToken);

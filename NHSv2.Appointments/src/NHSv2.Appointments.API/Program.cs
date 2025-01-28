@@ -1,6 +1,8 @@
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 using NHSv2.Appointments.Application;
 using NHSv2.Appointments.Infrastructure;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +10,44 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // options.ExampleFilters();
+    options.SwaggerDoc("v1", new OpenApiInfo{ Title = "NHSv2.Appointments.API", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "Specify the authorization token.",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+    });
+
+    OpenApiSecurityScheme securityScheme = new()
+    {
+        Reference = new OpenApiReference
+        {
+            Id = "Bearer",
+            Type = ReferenceType.SecurityScheme,
+        },
+        In = ParameterLocation.Header,
+        Name = "Bearer",
+        Scheme = "Bearer",
+    };
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { securityScheme, Array.Empty<string>() },
+    });
+    
+    options.OperationFilter<NHSv2.Appointments.SwaggerExtensions.SecurityRequirementsOperationFilter>();
+    
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
+
 builder.Services
     .AddAuthentication("Keycloak")
     .AddJwtBearer("Keycloak", options =>

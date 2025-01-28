@@ -3,8 +3,18 @@ using MediatR;
 namespace NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
 
 /// <summary>
-/// Should return the appointment Id.
+/// Create an appointment command.
 /// </summary>
-/// <param name="Id"></param>
-/// <param name="Test"></param>
-public record CreateAppointmentCommand(Guid Id, string Test) : IRequest;
+/// <param name="Start"></param>
+/// <param name="End"></param>
+/// <param name="PatientId"></param>
+/// <param name="Summary"></param>
+/// <param name="Description"></param>
+/// <param name="facilityName">To come in v2.</param>
+public record CreateAppointmentCommand(
+    DateTime Start,
+    DateTime End,
+    Guid PatientId,
+    string Summary,
+    string Description,
+    string facilityName) : IRequest;
