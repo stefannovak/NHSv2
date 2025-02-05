@@ -64,7 +64,7 @@ services:
       - jaeger
     networks:
       - keycloak_network
-        
+
   eventstore.db:
     image: eventstore/eventstore:24.2.0-jammy
     user: root
@@ -86,16 +86,15 @@ services:
         target: /var/log/eventstore
         
   appointments.db.reads:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql_server
     environment:
-      - SA_PASSWORD=Password123!
       - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
     ports:
-      - "5434:1433"
-    deploy:
-      resources:
-        limits:
-          memory: 2G
+      - "1433:1433"
+    user: "10001"
+    restart: unless-stopped
       
 volumes:
   postgres_data:
