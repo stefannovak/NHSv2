@@ -11,7 +11,7 @@ public class AppointmentProjections : BackgroundService
     private readonly ILogger<AppointmentProjections> _logger;
     private readonly EventStoreClient _eventStoreClient;
     // Left temporarily before EF is integrated.
-    private readonly string _connectionString = "Server=localhost,5434;Database=master;User Id=sa;Password=Password123!;";
+    private readonly string _connectionString = "Server=localhost,1433;Database=master;User Id=sa;Password=Password123!;";
     private const string STREAM_NAME = "appointments";
     
     public AppointmentProjections(
