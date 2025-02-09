@@ -20,7 +20,7 @@ services:
         RABBITMQ_DEFAULT_PASS: admin
         RABBITMQ_LOAD_DEFINITIONS: /etc/rabbitmq/definitions.json
     volumes:
-      - ./rabbit_88522f12e1e0_2024-12-5.json:/opt/definitions.json:ro
+      - ./rabbit_7f7213c4f545_2025-2-7.json:/opt/definitions.json:ro
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
     networks:
       - keycloak_network
