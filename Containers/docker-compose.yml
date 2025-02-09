@@ -4,9 +4,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: NHSv2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     networks:
       - keycloak_network
 
@@ -20,7 +20,7 @@ services:
         RABBITMQ_DEFAULT_PASS: admin
         RABBITMQ_LOAD_DEFINITIONS: /etc/rabbitmq/definitions.json
     volumes:
-      - ./rabbit_88522f12e1e0_2024-12-5.json:/opt/definitions.json:ro
+      - ./rabbit_7f7213c4f545_2025-2-7.json:/opt/definitions.json:ro
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
     networks:
       - keycloak_network
@@ -45,12 +45,12 @@ services:
       KC_HTTP_ENABLED: true
       KC_HOSTNAME_STRICT_HTTPS: false
       KC_HEALTH_ENABLED: true
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres/${POSTGRES_DB}
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: jdbc:postgresql://postgres/NHSv2
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
       KK_TO_RMQ_URL: rabbitmq
       KK_TO_RMQ_VHOST: NHSv2-dev
       KK_TO_RMQ_USERNAME: keycloak
@@ -64,7 +64,7 @@ services:
       - jaeger
     networks:
       - keycloak_network
-        
+
   eventstore.db:
     image: eventstore/eventstore:24.2.0-jammy
     user: root
@@ -86,16 +86,15 @@ services:
         target: /var/log/eventstore
         
   appointments.db.reads:
-    image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql_server
     environment:
-      - SA_PASSWORD=Password123!
       - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
     ports:
-      - "5434:1433"
-    deploy:
-      resources:
-        limits:
-          memory: 2G
+      - "1433:1433"
+    user: "10001"
+    restart: unless-stopped
       
 volumes:
   postgres_data:
