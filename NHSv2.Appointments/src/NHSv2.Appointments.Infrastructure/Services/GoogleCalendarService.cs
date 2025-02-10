@@ -89,7 +89,8 @@ public class GoogleCalendarService : ICalendarService
                     new EventReminder { Method = "email", Minutes = 60 * 24 },  // Email reminder 1 Day before
                     new EventReminder { Method = "popup", Minutes = 60 }   // Popup reminder 60 minutes before
                 }
-            }
+            },
+            // Attach an AppointmentId as metadata?
         };
 
         var request = _calendarService.Events.Insert(newEvent, _calendarId);

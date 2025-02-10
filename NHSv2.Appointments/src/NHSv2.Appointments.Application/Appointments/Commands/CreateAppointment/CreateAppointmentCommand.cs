@@ -1,4 +1,5 @@
 using MediatR;
+using NHSv2.Appointments.Domain.Appointments.Events;
 
 namespace NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
 
@@ -17,4 +18,6 @@ public record CreateAppointmentCommand(
     string Summary,
     string Description,
     string FacilityName,
-    string DoctorName) : IRequest;
+    string DoctorName,
+    Guid PatientId,
+    Guid DoctorId) : IRequest;

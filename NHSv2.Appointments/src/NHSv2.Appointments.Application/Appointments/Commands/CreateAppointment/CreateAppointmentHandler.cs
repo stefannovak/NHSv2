@@ -27,6 +27,9 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
     
     public async Task Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
+        var appointmentId = Guid.NewGuid();
+        
+        // TODO: - I want to be able to attach NHSv2's appointmentId to this calendar implementation.
         var createdCalendarEvent = await _calendarService.CreateAppointmentAsync(
             request.Summary,
             request.Description,
@@ -34,22 +37,28 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             request.PatientEmail,
             request.FacilityName,
             request.DoctorName);
+
+        var appointmentCreatedEvent = new AppointmentCreatedEvent(
+            appointmentId,
+            request.FacilityName,
+            request.DoctorId,
+            request.PatientId,
+            request.Start);
         
         var eventData = new EventData(
             Uuid.NewUuid(),
             nameof(AppointmentCreatedEvent),
-            JsonSerializer.SerializeToUtf8Bytes(new AppointmentCreatedEvent(new Appointment(Guid.NewGuid(),  Guid.NewGuid().ToString(), createdCalendarEvent.Id)))
-        );
+            JsonSerializer.SerializeToUtf8Bytes(appointmentCreatedEvent));
             
         await _eventStoreClient.AppendToStreamAsync(
             "appointments",
             StreamState.Any,
             new[] { eventData },
-            cancellationToken: new CancellationToken()
+            cancellationToken: cancellationToken
         );
         
         await _bus.Publish(new AppointmentCreatedContract(
-            Guid.NewGuid(),
+            appointmentId,
             $"Your appointment at {request.FacilityName} has been confirmed.",
             EmailHtmlBody(request)),
             cancellationToken);

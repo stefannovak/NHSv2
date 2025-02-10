@@ -22,7 +22,10 @@ public class AppointmentsController : ControllerBase
     }
 
     /// <summary>
-    /// Create an appointment.
+    /// Create an appointment. Appointments are 30 minute slots. Accessible only by a doctor. A doctor can only
+    /// create an appointment for a clinic they belong to. A Google calendar appointment will be created. An appointment is then
+    /// committed to an event store, where it is picked up and processed. There may be delays between the appointment being
+    /// created and the appointment appearing in a database.
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
@@ -34,9 +37,10 @@ public class AppointmentsController : ControllerBase
         var doctorEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         var facilitiesDoctorBelongsTo = User.Claims.Where(c => c.Type == "medical_facilities");
         var doctorBelongsToRequestFacility = facilitiesDoctorBelongsTo.Any(x => x.Value == request.FacilityName);
-        if (doctorName == null || doctorEmail == null)
+        var couldParseGuid = Guid.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out var doctorId);
+        if (doctorName == null || doctorEmail == null || couldParseGuid == false)
         {
-            return Problem("Doctor name or email not found could not be found from token.");
+            return Problem("Doctor name, email or ID not found could not be found from token.");
         }
         
         if (!doctorBelongsToRequestFacility)
@@ -64,7 +68,9 @@ public class AppointmentsController : ControllerBase
             request.Summary,
             request.Description,
             request.FacilityName,
-            doctorName);
+            doctorName,
+            request.PatientId,
+            doctorId);
         
         await _mediator.Send(appointmentCreatedCommand);
         return Accepted();

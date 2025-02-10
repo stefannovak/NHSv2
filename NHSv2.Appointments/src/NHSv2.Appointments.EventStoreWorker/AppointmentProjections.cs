@@ -70,8 +70,8 @@ public class AppointmentProjections : BackgroundService
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
     {
         var appointmentCreatedEvent = JsonSerializer.Deserialize<AppointmentCreatedEvent>(evnt.Event.Data.Span);
-        Console.WriteLine($"Handling appointment created: {appointmentCreatedEvent.Appointment.Id}");
-        await InsertAppointmentToDatabase(appointmentCreatedEvent.Appointment);
+        Console.WriteLine($"Handling appointment created: {appointmentCreatedEvent.AppointmentId}");
+        // await InsertAppointmentToDatabase(appointmentCreatedEvent.Appointment);
     }
     
     private async Task HandleAppointmentUpdatedEvent(ResolvedEvent evnt)
