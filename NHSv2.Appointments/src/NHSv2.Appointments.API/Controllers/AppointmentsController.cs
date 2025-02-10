@@ -63,7 +63,8 @@ public class AppointmentsController : ControllerBase
             "test@test.com",
             request.Summary,
             request.Description,
-            request.FacilityName);
+            request.FacilityName,
+            doctorName);
         
         await _mediator.Send(appointmentCreatedCommand);
         return Accepted();

@@ -50,7 +50,13 @@ public class GoogleCalendarService : ICalendarService
         return new List<TimePeriod>();
     }
     
-    public async Task<Event> CreateAppointmentAsync(string summary, string description, DateTime startTime, string patientEmail)
+    public async Task<Event> CreateAppointmentAsync(
+        string summary,
+        string description,
+        DateTime startTime,
+        string patientEmail,
+        string facilityName,
+        string doctorName)
     {
         var newEvent = new Event
         {
@@ -65,8 +71,8 @@ public class GoogleCalendarService : ICalendarService
             //         Comment = "What a cool dude",
             //     }
             // },
-            Summary = summary,
-            Description = description,
+            Summary = $"Your appointment at {facilityName}: {summary}",
+            Description = "Facility: " + facilityName + $" invites you to an appointment with Dr. {doctorName}. \n{description}",
             Start = new EventDateTime
             {
                 DateTimeDateTimeOffset = startTime,

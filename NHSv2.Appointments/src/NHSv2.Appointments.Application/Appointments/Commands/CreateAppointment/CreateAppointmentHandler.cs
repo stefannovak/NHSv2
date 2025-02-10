@@ -31,7 +31,9 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             request.Summary,
             request.Description,
             DateTime.Now,
-            request.PatientEmail);
+            request.PatientEmail,
+            request.FacilityName,
+            request.DoctorName);
         
         var eventData = new EventData(
             Uuid.NewUuid(),

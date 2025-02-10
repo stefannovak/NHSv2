@@ -9,10 +9,12 @@ namespace NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment
 /// <param name="PatientEmail"></param>
 /// <param name="Summary"></param>
 /// <param name="Description"></param>
-/// <param name="facilityName">To come in v2.</param>
+/// <param name="FacilityName">To come in v2.</param>
+/// <param name="DoctorName"></param>
 public record CreateAppointmentCommand(
     DateTime Start,
     string PatientEmail,
     string Summary,
     string Description,
-    string facilityName) : IRequest;
+    string FacilityName,
+    string DoctorName) : IRequest;
