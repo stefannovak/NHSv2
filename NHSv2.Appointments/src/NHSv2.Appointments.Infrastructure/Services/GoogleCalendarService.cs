@@ -50,7 +50,13 @@ public class GoogleCalendarService : ICalendarService
         return new List<TimePeriod>();
     }
     
-    public async Task<Event> CreateAppointmentAsync(string summary, string description, DateTime startTime, string patient)
+    public async Task<Event> CreateAppointmentAsync(
+        string summary,
+        string description,
+        DateTime startTime,
+        string patientEmail,
+        string facilityName,
+        string doctorName)
     {
         var newEvent = new Event
         {
@@ -61,12 +67,12 @@ public class GoogleCalendarService : ICalendarService
             //     new EventAttendee
             //     {
             //         DisplayName = "Stefan Test",
-            //         Email = patient,
+            //         Email = patientEmail,
             //         Comment = "What a cool dude",
             //     }
             // },
-            Summary = summary,
-            Description = description,
+            Summary = $"Your appointment at {facilityName}: {summary}",
+            Description = "Facility: " + facilityName + $" invites you to an appointment with Dr. {doctorName}. \n{description}",
             Start = new EventDateTime
             {
                 DateTimeDateTimeOffset = startTime,
@@ -83,7 +89,8 @@ public class GoogleCalendarService : ICalendarService
                     new EventReminder { Method = "email", Minutes = 60 * 24 },  // Email reminder 1 Day before
                     new EventReminder { Method = "popup", Minutes = 60 }   // Popup reminder 60 minutes before
                 }
-            }
+            },
+            // Attach an AppointmentId as metadata?
         };
 
         var request = _calendarService.Events.Insert(newEvent, _calendarId);

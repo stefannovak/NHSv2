@@ -12,9 +12,17 @@ public interface ICalendarService
     /// <param name="summary"></param>
     /// <param name="description"></param>
     /// <param name="startTime"></param>
-    /// <param name="patient"></param>
+    /// <param name="patientEmail"></param>
+    /// <param name="facilityName"></param>
+    /// <param name="doctorName"></param>
     /// <returns></returns>
-    Task<Event> CreateAppointmentAsync(string summary, string description, DateTime startTime, string patient);
+    Task<Event> CreateAppointmentAsync(
+        string summary,
+        string description,
+        DateTime startTime,
+        string patientEmail,
+        string facilityName,
+        string doctorName);
     
     /// <summary>
     /// Checks to see if there's any appointments in the next half hour from start.
