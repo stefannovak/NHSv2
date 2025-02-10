@@ -50,8 +50,59 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
         
         await _bus.Publish(new AppointmentCreatedContract(
             Guid.NewGuid(),
-            "Test",
-            $"<p>Appointment created.</p><a href='{createdCalendarEvent.HtmlLink}'>View appointment</a>"),
+            $"Your appointment at {request.FacilityName} has been confirmed.",
+            EmailHtmlBody(request)),
             cancellationToken);
+    }
+
+    private string EmailHtmlBody(CreateAppointmentCommand request)
+    {
+        return $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                }}
+                .container {{
+                    width: 80%;
+                    margin: auto;
+                    padding: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    background-color: #f9f9f9;
+                }}
+                .header {{
+                    text-align: center;
+                    padding-bottom: 20px;
+                }}
+                .details {{
+                    margin-top: 20px;
+                }}
+                .details p {{
+                    margin: 5px 0;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h2>Appointment Confirmation</h2>
+                </div>
+                <div class='details'>
+                    <p>Dear {request.PatientEmail},</p>
+                    <p>We are pleased to confirm your appointment with Dr. {request.DoctorName} at {request.FacilityName}.</p>
+                    <p><strong>Appointment Details:</strong></p>
+                    <p><strong>Date and Time:</strong> {request.Start.ToString("f")}</p>
+                    <p><strong>Summary:</strong> {request.Summary}</p>
+                    <p><strong>Description:</strong> {request.Description}</p>
+                    <p>We look forward to seeing you then!</p>
+                    <p>Best regards,</p>
+                    <p>{request.FacilityName}</p>
+                </div>
+            </div>
+        </body>
+        </html>";
     }
 }
