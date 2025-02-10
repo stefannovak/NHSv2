@@ -50,7 +50,7 @@ public class GoogleCalendarService : ICalendarService
         return new List<TimePeriod>();
     }
     
-    public async Task<Event> CreateAppointmentAsync(string summary, string description, DateTime startTime, string patient)
+    public async Task<Event> CreateAppointmentAsync(string summary, string description, DateTime startTime, string patientEmail)
     {
         var newEvent = new Event
         {
@@ -61,7 +61,7 @@ public class GoogleCalendarService : ICalendarService
             //     new EventAttendee
             //     {
             //         DisplayName = "Stefan Test",
-            //         Email = patient,
+            //         Email = patientEmail,
             //         Comment = "What a cool dude",
             //     }
             // },

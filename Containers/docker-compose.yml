@@ -4,7 +4,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: NHSv2
+      POSTGRES_DB: keycloak_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     networks:
@@ -48,7 +48,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres/NHSv2
+      KC_DB_URL: jdbc:postgresql://postgres/keycloak_db
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: postgres
       KK_TO_RMQ_URL: rabbitmq

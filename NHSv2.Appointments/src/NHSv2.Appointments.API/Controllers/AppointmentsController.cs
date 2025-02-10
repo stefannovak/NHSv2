@@ -42,8 +42,15 @@ public class AppointmentsController : ControllerBase
         if (!doctorBelongsToRequestFacility)
         {
             return Unauthorized("Doctor does not belong to the facility.");
-        }   
-        
+        }
+
+        // TODO: - Keycloak service feature. 
+        // var user = _keycloakService.GetUserById(request.PatientId);
+        // if (user is null)
+        // {
+        //     return NotFound("Patient not found.");
+        // }
+
         var isAppointmentSlotAvailable = await _calendarService.IsAppointmentSlotAvailable(request.Start);
         if (!isAppointmentSlotAvailable)
         {
@@ -52,8 +59,8 @@ public class AppointmentsController : ControllerBase
         
         var appointmentCreatedCommand = new CreateAppointmentCommand(
             request.Start,
-            request.End,
-            request.PatientId,
+            // user.Email,
+            "test@test.com",
             request.Summary,
             request.Description,
             request.FacilityName);
