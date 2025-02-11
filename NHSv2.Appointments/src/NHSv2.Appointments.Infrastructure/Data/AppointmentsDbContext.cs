@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NHSv2.Appointments.Domain;
 using NHSv2.Appointments.Domain.Appointments;
 
 namespace NHSv2.Appointments.Infrastructure.Data;
@@ -11,6 +12,8 @@ public class AppointmentsDbContext : DbContext
     }
     
     public DbSet<Appointment> Appointments { get; set; }
+    
+    public DbSet<EventStoreCheckpoint> EventStoreCheckpoints { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

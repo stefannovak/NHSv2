@@ -60,6 +60,31 @@ namespace NHSv2.Appointments.Infrastructure.Data.Migrations
 
                     b.ToTable("Appointments");
                 });
+
+            modelBuilder.Entity("NHSv2.Appointments.Domain.EventStoreCheckpoint", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<long>("Position")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("StreamName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventStoreCheckpoints");
+                });
 #pragma warning restore 612, 618
         }
     }
