@@ -47,7 +47,7 @@ public static class ServiceCollectionExtensions
         serviceCollection.AddDbContext<AppointmentsDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
-        });
+        }, ServiceLifetime.Singleton);
         
         return serviceCollection;
     }

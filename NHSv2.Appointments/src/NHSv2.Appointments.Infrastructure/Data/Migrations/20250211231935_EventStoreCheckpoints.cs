@@ -25,6 +25,11 @@ namespace NHSv2.Appointments.Infrastructure.Data.Migrations
                 {
                     table.PrimaryKey("PK_EventStoreCheckpoints", x => x.Id);
                 });
+            
+            migrationBuilder.InsertData(
+                table: "EventStoreCheckpoints",
+                columns: new[] { "Id", "StreamName", "Position", "CreatedAt", "UpdatedAt" },
+                values: new object[] { Guid.NewGuid(), "appointments", 0L, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow });
         }
 
         /// <inheritdoc />

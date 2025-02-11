@@ -12,7 +12,7 @@ using NHSv2.Appointments.Infrastructure.Data;
 namespace NHSv2.Appointments.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppointmentsDbContext))]
-    [Migration("20250211225454_EventStoreCheckpoints")]
+    [Migration("20250211231935_EventStoreCheckpoints")]
     partial class EventStoreCheckpoints
     {
         /// <inheritdoc />
