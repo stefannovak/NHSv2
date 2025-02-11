@@ -78,7 +78,7 @@ public class AppointmentProjections : BackgroundService
     {
         var appointmentUpdatedEvent = JsonSerializer.Deserialize<AppointmentUpdatedEvent>(evnt.Event.Data.Span);
         Console.WriteLine($"Handling appointment updated: {appointmentUpdatedEvent.id}");
-        await UpdateAppointmentInDatabase(new Appointment(appointmentUpdatedEvent.id, appointmentUpdatedEvent.testUpdate, ""));
+        // await UpdateAppointmentInDatabase(new Appointment(appointmentUpdatedEvent.id, appointmentUpdatedEvent.testUpdate, ""));
     }
     
     private async Task InsertAppointmentToDatabase(Appointment appointment)
@@ -88,7 +88,7 @@ public class AppointmentProjections : BackgroundService
             await connection.OpenAsync();
             var command = new SqlCommand("INSERT INTO Appointments (Id, Test) VALUES (@Id, @Test)", connection);
             command.Parameters.AddWithValue("@Id", appointment.Id);
-            command.Parameters.AddWithValue("@Test", appointment.Test);
+            command.Parameters.AddWithValue("@Test", appointment.FacilityName);
             await command.ExecuteNonQueryAsync();
         }
 
@@ -102,7 +102,7 @@ public class AppointmentProjections : BackgroundService
             await connection.OpenAsync();
             var command = new SqlCommand("UPDATE Appointments SET Test = @Test WHERE Id = @Id", connection);
             command.Parameters.AddWithValue("@Id", appointment.Id);
-            command.Parameters.AddWithValue("@Test", appointment.Test);
+            command.Parameters.AddWithValue("@Test", appointment.FacilityName);
             await command.ExecuteNonQueryAsync();
         }
 

@@ -1,20 +1,45 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace NHSv2.Appointments.Domain.Appointments;
 
-public class Appointment
+public class Appointment : BaseEntity
 {
-    public Guid Id { get; private init; }
+    public Appointment(
+        Guid doctorId,
+        Guid patientId,
+        Guid appointmentId,
+        DateTimeOffset start,
+        string facilityName,
+        string clientCalendarId)
+    {
+        DoctorId = doctorId;
+        PatientId = patientId;
+        AppointmentId = appointmentId;
+        Start = start;
+        FacilityName = facilityName;
+        ClientCalendarId = clientCalendarId;
+    }
 
-    public string Test { get; set; }
+    [Required]
+    public Guid DoctorId { get; set; }
+    
+    [Required]
+    public Guid PatientId { get; set; }
+
+    [Required]
+    public Guid AppointmentId { get; set; }
+
+    [Required]
+    public DateTimeOffset Start { get; set; }
+    
+    [Required]
+    [MaxLength(100)]
+    public string FacilityName { get; set; }
 
     /// <summary>
     /// Currently this is a Google Calendar Event id.
     /// </summary>
-    public string AppointmentId { get; init; }
-
-    public Appointment(Guid id, string test, string appointmentId)
-    {
-        Id = id;
-        Test = test;
-        AppointmentId = appointmentId;
-    }
+    [Required]
+    [MaxLength(100)]
+    public string ClientCalendarId { get; init; }
 }
