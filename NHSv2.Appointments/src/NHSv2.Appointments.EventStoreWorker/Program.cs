@@ -3,7 +3,7 @@ using NHSv2.Appointments.Infrastructure;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddInfrastructureServices();
-builder.Services.AddAppointmentsDbContext(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!);
+builder.Services.AddAppointmentsDbContextForEventStore(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!);
 builder.Services.AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 builder.Services.AddHostedService<AppointmentProjections>();
 

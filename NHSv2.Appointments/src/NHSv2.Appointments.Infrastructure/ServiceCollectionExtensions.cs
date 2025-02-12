@@ -43,7 +43,7 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
     
-    public static IServiceCollection AddAppointmentsDbContext(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddAppointmentsDbContextForEventStore(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AppointmentsDbContext>(options =>
         {
