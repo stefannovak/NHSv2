@@ -10,4 +10,11 @@ public interface IAppointmentsRepository
     /// <param name="appointment"></param>
     /// <returns></returns>
     Task InsertAsync(Appointment appointment);
+    
+    /// <summary>
+    /// Get appointments.
+    /// </summary>
+    /// <param name="predicate">A selector.</param>
+    /// <returns></returns>
+    IEnumerable<Appointment> GetAppointments(Func<Appointment, bool> predicate);
 }

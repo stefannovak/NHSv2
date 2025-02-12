@@ -54,4 +54,16 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
         return services;
     }
+    
+    public static IServiceCollection AddAppointmentsDbContext(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<AppointmentsDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString);
+        }, ServiceLifetime.Singleton);
+        
+        services.AddSingleton<IAppointmentsRepository, AppointmentsRepository>();
+        services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
+        return services;
+    }
 }

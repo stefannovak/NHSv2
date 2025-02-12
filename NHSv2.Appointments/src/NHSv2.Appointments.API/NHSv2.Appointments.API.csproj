@@ -33,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Dtos\Responses\" />
       <Folder Include="SwaggerExtensions\" />
     </ItemGroup>
 </Project>
