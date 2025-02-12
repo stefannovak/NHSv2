@@ -73,6 +73,11 @@ builder.Services
     .AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
 builder.Services.AddInfrastructureServices();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetValue<string>("Redis:ConnectionString")!;
+});
+
 builder.Services.AddAppointmentsDbContext(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!);
 
 var app = builder.Build();

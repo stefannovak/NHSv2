@@ -1,5 +1,7 @@
 using System.Text.Json;
 using EventStore.Client;
+using Microsoft.Extensions.Caching.Distributed;
+using NHSv2.Appointments.Application.Redis;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Domain.Appointments.Events;
@@ -12,18 +14,21 @@ public class AppointmentProjections : BackgroundService
     private readonly EventStoreClient _eventStoreClient;
     private readonly IAppointmentsRepository _appointmentsRepository;
     private readonly IEventStoreCheckpointRepository _checkpointRepository;
+    private readonly IDistributedCache _cache;
     private const string StreamName = "appointments";
     
     public AppointmentProjections(
         ILogger<AppointmentProjections> logger,
         EventStoreClient eventStoreClient,
         IAppointmentsRepository appointmentsRepository,
-        IEventStoreCheckpointRepository checkpointRepository)
+        IEventStoreCheckpointRepository checkpointRepository,
+        IDistributedCache cache)
     {
         _logger = logger;
         _eventStoreClient = eventStoreClient;
         _appointmentsRepository = appointmentsRepository;
         _checkpointRepository = checkpointRepository;
+        _cache = cache;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -65,7 +70,10 @@ public class AppointmentProjections : BackgroundService
         }
 
         await InsertAppointmentToDatabase(appointmentCreatedEvent);
-        Console.WriteLine($"Handling appointment created: {appointmentCreatedEvent.AppointmentId}");
+        _logger.LogInformation($"Handling appointment created: {appointmentCreatedEvent.AppointmentId}");
+        
+        var cacheKeyToFlush = CacheKeys.AppointmentsByDoctorAndFacility(appointmentCreatedEvent.FacilityName, appointmentCreatedEvent.DoctorId);
+        await _cache.RemoveAsync(cacheKeyToFlush);
     }
     
     private async Task InsertAppointmentToDatabase(AppointmentCreatedEvent createdEvent)
