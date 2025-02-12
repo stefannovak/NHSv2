@@ -73,6 +73,7 @@ builder.Services
     .AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
 builder.Services.AddInfrastructureServices();
+builder.Services.AddAppointmentsDbContext(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

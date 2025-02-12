@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
+using NHSv2.Appointments.Application.Appointments.Queries.GetAppointments;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Dtos.Requests;
 
@@ -74,5 +75,26 @@ public class AppointmentsController : ControllerBase
         
         await _mediator.Send(appointmentCreatedCommand);
         return Accepted();
+    }
+    
+    [Authorize(Roles = "doctor")]
+    [HttpGet("facilities/{facilityName}")]
+    public async Task<ActionResult> GetAppointments([FromRoute] string facilityName)
+    {
+        var couldParseGuid = Guid.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out var doctorId);
+        if (couldParseGuid == false)
+        {
+            return Problem("Doctor ID not found could not be found from token.");
+        }
+        
+        var facilitiesDoctorBelongsTo = User.Claims.Where(c => c.Type == "medical_facilities");
+        var doctorBelongsToRequestFacility = facilitiesDoctorBelongsTo.Any(x => x.Value == facilityName);
+        if (!doctorBelongsToRequestFacility)
+        {
+            return Unauthorized("Doctor does not belong to the facility.");
+        }
+        
+        var appointments = await _mediator.Send(new GetAppointmentsQuery(facilityName, doctorId));
+        return Ok(appointments);
     }
 }
