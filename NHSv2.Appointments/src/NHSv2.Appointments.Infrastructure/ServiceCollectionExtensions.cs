@@ -3,8 +3,10 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Appointments.Application.Consumers;
+using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Infrastructure.Data;
+using NHSv2.Appointments.Infrastructure.Persistence;
 using NHSv2.Appointments.Infrastructure.Services;
 
 namespace NHSv2.Appointments.Infrastructure;
@@ -30,7 +32,6 @@ public static class ServiceCollectionExtensions
         });
         
         services.AddTransient<ICalendarService, GoogleCalendarService>();
-        
         return services;
     }
     
@@ -42,13 +43,15 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
     
-    public static IServiceCollection AddAppointmentsDbContext(this IServiceCollection serviceCollection, string connectionString)
+    public static IServiceCollection AddAppointmentsDbContextForEventStore(this IServiceCollection services, string connectionString)
     {
-        serviceCollection.AddDbContext<AppointmentsDbContext>(options =>
+        services.AddDbContext<AppointmentsDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
-        });
+        }, ServiceLifetime.Singleton);
         
-        return serviceCollection;
+        services.AddSingleton<IAppointmentsRepository, AppointmentsRepository>();
+        services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
+        return services;
     }
 }

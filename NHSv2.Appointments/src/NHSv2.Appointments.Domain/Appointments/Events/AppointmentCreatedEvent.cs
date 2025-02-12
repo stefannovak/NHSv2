@@ -5,4 +5,5 @@ public record AppointmentCreatedEvent(
     string FacilityName,
     Guid DoctorId,
     Guid PatientId,
-    DateTime AppointmentStart);
+    DateTime AppointmentStart,
+    string CalendarEventId);

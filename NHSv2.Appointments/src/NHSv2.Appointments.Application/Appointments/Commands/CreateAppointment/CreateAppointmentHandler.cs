@@ -3,7 +3,6 @@ using EventStore.Client;
 using MassTransit;
 using MediatR;
 using NHSv2.Appointments.Application.Services.Contracts;
-using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Domain.Appointments.Events;
 using NHSv2.Messaging.Contracts.MessageContracts;
 
@@ -43,7 +42,8 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
             request.FacilityName,
             request.DoctorId,
             request.PatientId,
-            request.Start);
+            request.Start,
+            createdCalendarEvent.Id);
         
         var eventData = new EventData(
             Uuid.NewUuid(),
