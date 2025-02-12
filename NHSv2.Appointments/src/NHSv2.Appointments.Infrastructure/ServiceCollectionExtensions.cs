@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
         }, ServiceLifetime.Singleton);
         
         services.AddSingleton<IAppointmentsRepository, AppointmentsRepository>();
-        
+        services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
         return services;
     }
 }

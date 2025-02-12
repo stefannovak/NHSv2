@@ -1,10 +1,8 @@
 using System.Text.Json;
 using EventStore.Client;
-using Microsoft.EntityFrameworkCore;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Domain.Appointments.Events;
-using NHSv2.Appointments.Infrastructure.Data;
 
 namespace NHSv2.Appointments.EventStoreWorker;
 
@@ -12,28 +10,28 @@ public class AppointmentProjections : BackgroundService
 {
     private readonly ILogger<AppointmentProjections> _logger;
     private readonly EventStoreClient _eventStoreClient;
-    private readonly AppointmentsDbContext _context;
     private readonly IAppointmentsRepository _appointmentsRepository;
-    private const string STREAM_NAME = "appointments";
+    private readonly IEventStoreCheckpointRepository _checkpointRepository;
+    private const string StreamName = "appointments";
     
     public AppointmentProjections(
         ILogger<AppointmentProjections> logger,
         EventStoreClient eventStoreClient,
-        AppointmentsDbContext context,
-        IAppointmentsRepository appointmentsRepository)
+        IAppointmentsRepository appointmentsRepository,
+        IEventStoreCheckpointRepository checkpointRepository)
     {
         _logger = logger;
         _eventStoreClient = eventStoreClient;
-        _context = context;
         _appointmentsRepository = appointmentsRepository;
+        _checkpointRepository = checkpointRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var checkpoint = await GetCheckpoint();
+        var checkpoint = await _checkpointRepository.GetCheckpoint(StreamName);
         
         await using var subscription = _eventStoreClient.SubscribeToStream(
-            STREAM_NAME,
+            StreamName,
             FromStream.After(new StreamPosition(Convert.ToUInt32(checkpoint))),
             cancellationToken: stoppingToken);
         
@@ -46,12 +44,6 @@ public class AppointmentProjections : BackgroundService
         }
     }
     
-    private async Task<long> GetCheckpoint()
-    {
-        var checkpoint = await _context.EventStoreCheckpoints.FirstOrDefaultAsync(x => x.StreamName == STREAM_NAME);
-        return checkpoint?.Position ?? 0;
-    }
-    
     private async Task HandleEvent(ResolvedEvent evnt)
     {
         switch (evnt.Event.EventType)
@@ -61,7 +53,7 @@ public class AppointmentProjections : BackgroundService
                 break;
         }
         
-        await IncrementCheckpoint();
+        await _checkpointRepository.IncrementCheckpoint(StreamName);
     }
     
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
@@ -88,12 +80,5 @@ public class AppointmentProjections : BackgroundService
 
         await _appointmentsRepository.InsertAsync(appointment);
         _logger.LogInformation($"Inserted appointment {appointment.Id} to database");
-    }
-    
-    private async Task IncrementCheckpoint()
-    {
-        var checkpoint = _context.EventStoreCheckpoints.First(x => x.StreamName == STREAM_NAME);
-        checkpoint.Position++;
-        await _context.SaveChangesAsync();
     }
 }
