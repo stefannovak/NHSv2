@@ -18,7 +18,7 @@ public class AppointmentsConsumer : IConsumer<AppointmentCreatedContract>
     public async Task Consume(ConsumeContext<AppointmentCreatedContract> context)
     {
         Console.WriteLine($"Appointment created: {context.Message.AppointmentId}");
-        var success = await _emailService.SendEmail("stefannovak96@gmail.com", context.Message.Subject, context.Message.HtmlContent);
+        var success = await _emailService.SendEmail("stefannovak96+nhsv2@gmail.com", context.Message.Subject, context.Message.HtmlContent);
         if (success)
         {
             await _bus.Publish(new AppointmentEmailSentContract(context.Message.AppointmentId));

@@ -22,6 +22,7 @@ public class AppointmentEmailSentConsumer : IConsumer<AppointmentEmailSentContra
     {
         _logger.LogInformation($"Email confirmed sent for appointment: {context.Message.AppointmentId}");
         
+        // This isn't used at all, just cool.
         var eventData = new EventData(
             Uuid.NewUuid(),
             nameof(AppointmentEmailSentEvent),
