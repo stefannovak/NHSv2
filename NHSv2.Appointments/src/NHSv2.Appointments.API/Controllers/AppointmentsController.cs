@@ -15,11 +15,16 @@ public class AppointmentsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ICalendarService _calendarService;
+    private readonly IKeycloakService _keycloakService;
 
-    public AppointmentsController(IMediator mediator, ICalendarService calendarService)
+    public AppointmentsController(
+        IMediator mediator,
+        ICalendarService calendarService,
+        IKeycloakService keycloakService)
     {
         _mediator = mediator;
         _calendarService = calendarService;
+        _keycloakService = keycloakService;
     }
 
     /// <summary>
@@ -49,12 +54,11 @@ public class AppointmentsController : ControllerBase
             return Unauthorized("Doctor does not belong to the facility.");
         }
 
-        // TODO: - Keycloak service feature. 
-        // var user = _keycloakService.GetUserById(request.PatientId);
-        // if (user is null)
-        // {
-        //     return NotFound("Patient not found.");
-        // }
+        var user = await _keycloakService.GetUserById(request.PatientId);
+        if (user is null)
+        {
+            return NotFound("Patient not found.");
+        }
 
         var isAppointmentSlotAvailable = await _calendarService.IsAppointmentSlotAvailable(request.Start);
         if (!isAppointmentSlotAvailable)
@@ -64,8 +68,7 @@ public class AppointmentsController : ControllerBase
         
         var appointmentCreatedCommand = new CreateAppointmentCommand(
             request.Start,
-            // user.Email,
-            "test@test.com",
+            user.Email,
             request.Summary,
             request.Description,
             request.FacilityName,

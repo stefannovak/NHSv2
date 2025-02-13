@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using NHSv2.Appointments.Application;
+using NHSv2.Appointments.Application.Configuration;
 using NHSv2.Appointments.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +69,7 @@ builder.Services.AddAuthorization(options =>
     });
 });
 
+builder.Services.Configure<KeycloakOptions>(builder.Configuration.GetSection(KeycloakOptions.Keycloak));
 builder.Services
     .AddApplicationServices()
     .AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
