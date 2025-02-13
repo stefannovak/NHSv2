@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace NHSv2.Appointments.Application.Models;
 
 public class KeycloakUser
@@ -10,9 +8,7 @@ public class KeycloakUser
     
     public string Email { get; set; } = string.Empty;
     
-    // [JsonPropertyName("firstName")]
     public string FirstName { get; set; } = string.Empty;
     
-    // [JsonPropertyName("lastName")]
     public string LastName { get; set; } = string.Empty;
 }
