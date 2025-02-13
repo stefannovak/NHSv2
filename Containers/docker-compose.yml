@@ -96,6 +96,11 @@ services:
     user: "10001"
     restart: unless-stopped
       
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+      
 volumes:
   postgres_data:
     driver: local

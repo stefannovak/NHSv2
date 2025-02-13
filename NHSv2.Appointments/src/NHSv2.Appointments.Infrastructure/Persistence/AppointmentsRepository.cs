@@ -18,4 +18,9 @@ public class AppointmentsRepository : IAppointmentsRepository
         await _context.Appointments.AddAsync(appointment);
         await _context.SaveChangesAsync();
     }
+    
+    public IEnumerable<Appointment> GetAppointments(Func<Appointment, bool> predicate)
+    {
+        return _context.Appointments.Where(predicate);
+    }
 }
