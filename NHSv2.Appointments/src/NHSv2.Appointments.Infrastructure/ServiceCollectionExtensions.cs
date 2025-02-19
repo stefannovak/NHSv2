@@ -3,11 +3,13 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Appointments.Application.Consumers;
+using NHSv2.Appointments.Application.Helpers.Helpers;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Infrastructure.Data;
 using NHSv2.Appointments.Infrastructure.Persistence;
 using NHSv2.Appointments.Infrastructure.Services;
+using OpenTelemetry.Trace;
 
 namespace NHSv2.Appointments.Infrastructure;
 
@@ -32,6 +34,7 @@ public static class ServiceCollectionExtensions
         });
         
         services.AddTransient<ICalendarService, GoogleCalendarService>();
+        services.AddTelemetry();
         return services;
     }
     
@@ -64,6 +67,28 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<IAppointmentsRepository, AppointmentsRepository>();
         services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
+        return services;
+    }
+    
+    private static IServiceCollection AddTelemetry(this IServiceCollection services)
+    {
+        services
+            .AddOpenTelemetry()
+            .WithTracing(builder =>
+            {
+                builder
+                    .AddOtlpExporter(x =>
+                    {
+                        x.Endpoint = new Uri("http://localhost:4317");
+                    })
+                    .AddJaegerExporter()
+                    .AddCommonResourceBuilder()
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    .AddSqlClientInstrumentation()
+                    .AddSource(ActivitySourceHelper.ActivitySource.Name);
+            });
+        
         return services;
     }
 }

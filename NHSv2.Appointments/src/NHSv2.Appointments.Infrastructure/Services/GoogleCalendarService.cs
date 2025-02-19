@@ -2,6 +2,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Microsoft.Extensions.Configuration;
+using NHSv2.Appointments.Application.Helpers.Helpers;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Infrastructure.Configuration;
 
@@ -31,6 +32,7 @@ public class GoogleCalendarService : ICalendarService
     
     public async Task<IList<TimePeriod>> GetAvailableSlotsAsync(DateTime start, DateTime end)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var request = new FreeBusyRequest
         {
             TimeMinDateTimeOffset = start,
@@ -58,6 +60,8 @@ public class GoogleCalendarService : ICalendarService
         string facilityName,
         string doctorName)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
+
         var newEvent = new Event
         {
             // https://github.com/stefannovak/NHSv2/issues/1
@@ -99,6 +103,8 @@ public class GoogleCalendarService : ICalendarService
 
     public async Task<bool> IsAppointmentSlotAvailable(DateTime start)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
+
         var request = new FreeBusyRequest
         {
             TimeMinDateTimeOffset = start,

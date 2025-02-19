@@ -1,6 +1,7 @@
 using System.Text.Json;
 using EventStore.Client;
 using Microsoft.Extensions.Caching.Distributed;
+using NHSv2.Appointments.Application.Helpers.Helpers;
 using NHSv2.Appointments.Application.Redis;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
@@ -63,6 +64,7 @@ public class AppointmentProjections : BackgroundService
     
     private async Task HandleAppointmentCreated(ResolvedEvent evnt)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var appointmentCreatedEvent = JsonSerializer.Deserialize<AppointmentCreatedEvent>(evnt.Event.Data.Span);
         if (appointmentCreatedEvent == null)
         {

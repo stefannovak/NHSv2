@@ -1,3 +1,4 @@
+using NHSv2.Appointments.Application.Helpers.Helpers;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Infrastructure.Data;
@@ -15,12 +16,14 @@ public class AppointmentsRepository : IAppointmentsRepository
 
     public async Task InsertAsync(Appointment appointment)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         await _context.Appointments.AddAsync(appointment);
         await _context.SaveChangesAsync();
     }
     
     public IEnumerable<Appointment> GetAppointments(Func<Appointment, bool> predicate)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         return _context.Appointments.Where(predicate);
     }
 }
