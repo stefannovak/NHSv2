@@ -11,8 +11,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\NHSv2.Appointments\src\NHSv2.Appointments.Application\NHSv2.Appointments.Application.csproj" />
-      <ProjectReference Include="..\..\..\NHSv2.Appointments\src\NHSv2.Appointments.Infrastructure\NHSv2.Appointments.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\..\NHSv2.Payments\src\NHSv2.Payments.Application\NHSv2.Payments.Application.csproj" />
+      <ProjectReference Include="..\..\..\NHSv2.Payments\src\NHSv2.Payments.Infrastructure\NHSv2.Payments.Infrastructure.csproj" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
     </ItemGroup>
 
 </Project>

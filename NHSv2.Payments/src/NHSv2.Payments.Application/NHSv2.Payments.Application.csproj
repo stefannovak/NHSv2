@@ -10,4 +10,17 @@
       <ProjectReference Include="..\NHSv2.Payments.Domain\NHSv2.Payments.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\9.0.1\lib\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Options">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.extensions.options\9.0.1\lib\net9.0\Microsoft.Extensions.Options.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Stripe.net" Version="47.4.0-beta.1" />
+    </ItemGroup>
+
 </Project>
