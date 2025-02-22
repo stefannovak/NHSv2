@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Options;
-using NHSv2.Payments.Application.Configurations;
 using NHSv2.Payments.Application.DTOs;
 using NHSv2.Payments.Application.DTOs.Responses;
 using NHSv2.Payments.Application.Services.Contracts;
+using Stripe;
 using Stripe.Checkout;
+using StripeConfiguration = NHSv2.Payments.Application.Configurations.StripeConfiguration;
 
 namespace NHSv2.Payments.Application.Services;
 
@@ -16,28 +17,30 @@ public class TransactionService : ITransactionService
     
     public async Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request)
     {
+        var customer = await GetCustomer(request.CustomerEmail);
+        var lineItems = request.Products.Select(x =>
+            new SessionLineItemOptions
+        {
+            PriceData = new SessionLineItemPriceDataOptions
+            {
+                Currency = x.Product.Currency,
+                ProductData = new SessionLineItemPriceDataProductDataOptions
+                {
+                    Name = x.Product.Name,
+                },
+                UnitAmount = Convert.ToInt64(x.Product.Amount)
+            },
+            Quantity = x.Quantity,
+        });
+        
         var checkout = new SessionCreateOptions
         {
             PaymentMethodTypes = new List<string> { "card" },
-            LineItems = new List<SessionLineItemOptions>
-            {
-                new()
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        Currency = "gbp",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = "NHSv2 Payment",
-                        },
-                        UnitAmount = 1000,
-                    },
-                    Quantity = 1,
-                },
-            },
+            LineItems = lineItems.ToList(),
             Mode = "payment",
-            SuccessUrl = "https://google.com",
-            CancelUrl = "https://google.com",
+            SuccessUrl = request.RedirectUrl,
+            CancelUrl = request.ReturnUrl,
+            Customer = customer.Id,
         };
         
         var sessionService = new SessionService();
@@ -45,5 +48,27 @@ public class TransactionService : ITransactionService
 
         Console.WriteLine(session.Url);
         return new CheckoutResponse(Guid.NewGuid(), session.Url);
+    }
+
+    private async Task<Customer> GetCustomer(string customerEmail)
+    {
+        var customerService = new CustomerService();
+        var customer = (await customerService.ListAsync(new CustomerListOptions
+        {
+            Email = customerEmail,
+            Limit = 1,
+        })).FirstOrDefault();
+
+        if (customer is null)
+        {
+            customer = await customerService.CreateAsync(new CustomerCreateOptions
+            {
+                Email = customerEmail,
+            });
+                
+            return customer;
+        }
+        
+        return customer;
     }
 }
