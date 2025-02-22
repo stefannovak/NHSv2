@@ -4,6 +4,22 @@
   },
   "Routes": [
     {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamHeaderTransform": {
+        "traceparent": "traceparent",
+        "tracestate": "tracestate"
+      }
+    },
+    {
       "UpstreamPathTemplate": "/api/appointments/facilities/{facilityName}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamPathTemplate": "/api/appointments/facilities/{facilityName}",
