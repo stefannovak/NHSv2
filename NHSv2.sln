@@ -22,6 +22,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Communications.Infras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Messaging.Contracts", "NHSv2.Messaging\src\NHSv2.Messaging.Contracts\NHSv2.Messaging.Contracts.csproj", "{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.API", "NHSv2.Payments\src\NHSv2.Payments.API\NHSv2.Payments.API.csproj", "{682ED848-B714-4AC1-99B5-2A569ED2FC19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.Application", "NHSv2.Payments\src\NHSv2.Payments.Application\NHSv2.Payments.Application.csproj", "{E84319B4-9596-4B48-A35B-D94A91AF660A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.Infrastructure", "NHSv2.Payments\src\NHSv2.Payments.Infrastructure\NHSv2.Payments.Infrastructure.csproj", "{1833E9CF-9E10-41C4-8281-90E48642E15B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.Application.Tests", "NHSv2.Payments\test\NHSv2.Payments.Application.Tests\NHSv2.Payments.Application.Tests.csproj", "{E332B0A2-333F-45E8-9016-FB33EBDB0E94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.Domain", "NHSv2.Payments\src\NHSv2.Payments.Domain\NHSv2.Payments.Domain.csproj", "{B091D290-466B-4ACA-8034-8A87D9816C51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSv2.Payments.EventStoreWorker", "NHSv2.Payments\src\NHSv2.Payments.EventStoreWorker\NHSv2.Payments.EventStoreWorker.csproj", "{2D1E34E4-CAED-42DC-91B7-B98F954A0DEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +84,29 @@ Global
 		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD3E52D1-C3C8-47E3-9277-8BC21D7A0302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{682ED848-B714-4AC1-99B5-2A569ED2FC19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{682ED848-B714-4AC1-99B5-2A569ED2FC19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{682ED848-B714-4AC1-99B5-2A569ED2FC19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{682ED848-B714-4AC1-99B5-2A569ED2FC19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E84319B4-9596-4B48-A35B-D94A91AF660A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84319B4-9596-4B48-A35B-D94A91AF660A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84319B4-9596-4B48-A35B-D94A91AF660A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84319B4-9596-4B48-A35B-D94A91AF660A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1833E9CF-9E10-41C4-8281-90E48642E15B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1833E9CF-9E10-41C4-8281-90E48642E15B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1833E9CF-9E10-41C4-8281-90E48642E15B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1833E9CF-9E10-41C4-8281-90E48642E15B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E332B0A2-333F-45E8-9016-FB33EBDB0E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E332B0A2-333F-45E8-9016-FB33EBDB0E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E332B0A2-333F-45E8-9016-FB33EBDB0E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E332B0A2-333F-45E8-9016-FB33EBDB0E94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B091D290-466B-4ACA-8034-8A87D9816C51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B091D290-466B-4ACA-8034-8A87D9816C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B091D290-466B-4ACA-8034-8A87D9816C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B091D290-466B-4ACA-8034-8A87D9816C51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D1E34E4-CAED-42DC-91B7-B98F954A0DEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D1E34E4-CAED-42DC-91B7-B98F954A0DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D1E34E4-CAED-42DC-91B7-B98F954A0DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D1E34E4-CAED-42DC-91B7-B98F954A0DEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
