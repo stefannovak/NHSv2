@@ -4,28 +4,28 @@
   },
   "Routes": [
     {
-      "UpstreamPathTemplate": "/api/appointments/patient",
+      "UpstreamPathTemplate": "/api/appointments/facilities/{facilityName}",
       "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/appointments",
+      "DownstreamPathTemplate": "/api/appointments/facilities/{facilityName}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
-          {
+        {
           "Host": "localhost",
           "Port": 5001
-          }
+        }
       ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Keycloak",
         "AllowedScopes": []
       },
       "RouteClaimsRequirement": {
-        "role": ["patient"]
+        "roles": ["doctor"]
       }
     },
     {
-      "UpstreamPathTemplate": "/api/appointments/doctor",
-      "UpstreamHttpMethod": [ "Get" ],
-      "DownstreamPathTemplate": "/api/appointments/doctor",
+      "UpstreamPathTemplate": "/api/appointments",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/appointments",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {

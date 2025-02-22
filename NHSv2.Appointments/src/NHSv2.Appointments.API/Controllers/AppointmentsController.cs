@@ -109,5 +109,4 @@ public class AppointmentsController : ControllerBase
         await _mediator.Send(appointmentCreatedCommand);
         return Accepted();
     }
-    
 }
