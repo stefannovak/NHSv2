@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using NHSv2.Appointments.Application.Configuration;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Models;
 using NHSv2.Appointments.Application.Services.Contracts;
 
@@ -22,6 +23,7 @@ public class KeycloakService : IKeycloakService
     
     public async Task<KeycloakUser?> GetUserById(Guid userId)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var request = new HttpRequestMessage(HttpMethod.Get, $"/admin/realms/NHSv2-dev/users/{userId}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetAccessToken());
         var response = await _httpClient.SendAsync(request);

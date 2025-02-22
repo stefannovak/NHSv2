@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
 using NHSv2.Appointments.Application.Appointments.Queries.GetAppointments;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Dtos.Requests;
 
@@ -26,6 +28,33 @@ public class AppointmentsController : ControllerBase
         _calendarService = calendarService;
         _keycloakService = keycloakService;
     }
+    
+    /// <summary>
+    /// Get appointments for a facility. Accessible only by a doctor. A doctor can only get appointments for a clinic they belong to.
+    /// </summary>
+    /// <param name="facilityName"></param>
+    /// <returns>A cached response if appointments have not changed.</returns>
+    [Authorize(Roles = "doctor")]
+    [HttpGet("facilities/{facilityName}")]
+    public async Task<ActionResult> GetAppointments([FromRoute] string facilityName)
+    {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
+        var couldParseGuid = Guid.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out var doctorId);
+        if (couldParseGuid == false)
+        {
+            return Problem("Doctor ID not found could not be found from token.");
+        }
+        
+        var facilitiesDoctorBelongsTo = User.Claims.Where(c => c.Type == "medical_facilities");
+        var doctorBelongsToRequestFacility = facilitiesDoctorBelongsTo.Any(x => x.Value == facilityName);
+        if (!doctorBelongsToRequestFacility)
+        {
+            return Unauthorized("Doctor does not belong to the facility.");
+        }
+        
+        var appointments = await _mediator.Send(new GetAppointmentsQuery(facilityName, doctorId));
+        return Ok(appointments);
+    }
 
     /// <summary>
     /// Create an appointment. Appointments are 30 minute slots. Accessible only by a doctor. A doctor can only
@@ -39,6 +68,7 @@ public class AppointmentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateAppointment([FromBody] CreateAppointmentRequestDto request)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var doctorName = User.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value;
         var doctorEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
         var facilitiesDoctorBelongsTo = User.Claims.Where(c => c.Type == "medical_facilities");
@@ -80,24 +110,4 @@ public class AppointmentsController : ControllerBase
         return Accepted();
     }
     
-    [Authorize(Roles = "doctor")]
-    [HttpGet("facilities/{facilityName}")]
-    public async Task<ActionResult> GetAppointments([FromRoute] string facilityName)
-    {
-        var couldParseGuid = Guid.TryParse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out var doctorId);
-        if (couldParseGuid == false)
-        {
-            return Problem("Doctor ID not found could not be found from token.");
-        }
-        
-        var facilitiesDoctorBelongsTo = User.Claims.Where(c => c.Type == "medical_facilities");
-        var doctorBelongsToRequestFacility = facilitiesDoctorBelongsTo.Any(x => x.Value == facilityName);
-        if (!doctorBelongsToRequestFacility)
-        {
-            return Unauthorized("Doctor does not belong to the facility.");
-        }
-        
-        var appointments = await _mediator.Send(new GetAppointmentsQuery(facilityName, doctorId));
-        return Ok(appointments);
-    }
 }

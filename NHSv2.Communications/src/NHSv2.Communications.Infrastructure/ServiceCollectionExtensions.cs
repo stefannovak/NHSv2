@@ -1,8 +1,10 @@
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Communications.Application.Consumers;
+using NHSv2.Communications.Application.Helpers;
 using NHSv2.Communications.Application.Services.Contracts;
 using NHSv2.Communications.Infrastructure.Services;
+using OpenTelemetry.Trace;
 
 namespace NHSv2.Communications.Infrastructure;
 
@@ -28,6 +30,29 @@ public static class ServiceCollectionExtensions
                 cfg.ConfigureEndpoints(context);
             });
         });
+
+        services.AddTelemetry();
+        return services;
+    }
+    
+    private static IServiceCollection AddTelemetry(this IServiceCollection services)
+    {
+        services
+            .AddOpenTelemetry()
+            .WithTracing(builder =>
+            {
+                builder
+                    .AddOtlpExporter(x =>
+                    {
+                        x.Endpoint = new Uri("http://localhost:4317");
+                    })
+                    .AddJaegerExporter()
+                    .AddCommonResourceBuilder()
+                    .AddHttpClientInstrumentation()
+                    .AddAspNetCoreInstrumentation()
+                    .AddSqlClientInstrumentation()
+                    .AddSource(ActivitySourceHelper.ActivitySource.Name);
+            });
         
         return services;
     }

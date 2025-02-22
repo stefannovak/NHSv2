@@ -2,6 +2,7 @@ using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using NHSv2.Appointments.Application.Dtos.Responses;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Redis;
 using NHSv2.Appointments.Application.Repositories;
 
@@ -22,6 +23,7 @@ public class GetAppointmentsQueryHandler : IRequestHandler<GetAppointmentsQuery,
     
     public async Task<IList<AppointmentDtoByDoctor>> Handle(GetAppointmentsQuery request, CancellationToken cancellationToken)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var cacheKey = CacheKeys.AppointmentsByDoctorAndFacility(request.FacilityName, request.DoctorId);
         var cachedAppointments = await _cache.GetStringAsync(cacheKey, token: cancellationToken);
         if (cachedAppointments != null)
@@ -37,6 +39,7 @@ public class GetAppointmentsQueryHandler : IRequestHandler<GetAppointmentsQuery,
 
     private List<AppointmentDtoByDoctor> GetAppointmentsFromDb(GetAppointmentsQuery request)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var appointments = _appointmentsRepository
             .GetAppointments(x => x.FacilityName == request.FacilityName && x.DoctorId == request.DoctorId);
 
