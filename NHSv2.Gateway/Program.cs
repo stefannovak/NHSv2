@@ -1,11 +1,34 @@
+using NHSv2.Gateway;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 builder.Services.AddOcelot(builder.Configuration);
+builder.Services
+    .AddOpenTelemetry()
+    .WithTracing(tracerProviderBuilder =>
+    {
+        tracerProviderBuilder
+            .AddOtlpExporter(x =>
+            {
+                x.Endpoint = new Uri("http://localhost:4317");
+            })
+            .AddJaegerExporter()
+            .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                .AddService("NHSv2.Gateway")
+                .AddTelemetrySdk()
+                .AddEnvironmentVariableDetector())
+            .AddHttpClientInstrumentation()
+            .AddAspNetCoreInstrumentation()
+            .AddSqlClientInstrumentation()
+            .AddSource(ActivitySourceHelper.ActivitySource.Name);
+    });
+
 builder.Services
     .AddAuthentication("Keycloak")
     .AddJwtBearer("Keycloak", options =>
