@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\NHSv2.Payments.Domain\NHSv2.Payments.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

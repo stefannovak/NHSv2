@@ -10,4 +10,10 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.1"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NHSv2.Payments.Application\NHSv2.Payments.Application.csproj" />
+      <ProjectReference Include="..\NHSv2.Payments.Domain\NHSv2.Payments.Domain.csproj" />
+      <ProjectReference Include="..\NHSv2.Payments.Infrastructure\NHSv2.Payments.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>
