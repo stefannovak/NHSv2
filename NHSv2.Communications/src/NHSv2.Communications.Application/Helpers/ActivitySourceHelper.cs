@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace NHSv2.Appointments.Application.Helpers.Helpers;
+namespace NHSv2.Communications.Application.Helpers;
 
 public class ActivitySourceHelper
 {

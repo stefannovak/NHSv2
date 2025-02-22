@@ -1,7 +1,7 @@
 using System.Text.Json;
 using EventStore.Client;
 using Microsoft.Extensions.Caching.Distributed;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Redis;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
@@ -71,6 +71,7 @@ public class AppointmentProjections : BackgroundService
             return;
         }
 
+        activity?.AddTag("AppointmentId", appointmentCreatedEvent.AppointmentId);
         await InsertAppointmentToDatabase(appointmentCreatedEvent);
         _logger.LogInformation($"Handling appointment created: {appointmentCreatedEvent.AppointmentId}");
         

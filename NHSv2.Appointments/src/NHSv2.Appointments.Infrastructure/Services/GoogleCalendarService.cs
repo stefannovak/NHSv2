@@ -2,7 +2,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Microsoft.Extensions.Configuration;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Infrastructure.Configuration;
 

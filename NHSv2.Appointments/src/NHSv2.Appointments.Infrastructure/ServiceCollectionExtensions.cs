@@ -3,7 +3,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Appointments.Application.Consumers;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Infrastructure.Data;

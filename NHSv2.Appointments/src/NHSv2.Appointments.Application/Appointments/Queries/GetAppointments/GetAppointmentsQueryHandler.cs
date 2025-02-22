@@ -2,7 +2,7 @@ using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using NHSv2.Appointments.Application.Dtos.Responses;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Redis;
 using NHSv2.Appointments.Application.Repositories;
 

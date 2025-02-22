@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSv2.Communications.Application.Configuration;
+using NHSv2.Communications.Application.Helpers;
 using NHSv2.Communications.Application.Services.Contracts;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -30,6 +32,7 @@ public class EmailService : IEmailService
 
     public async Task<bool> SendEmail(string destinationAddress, string subject, string htmlContent)
     {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         var message = new SendGridMessage
         {
             From = new EmailAddress(_sendGridOptions.Value.FromAddress, "NHSv2"),
@@ -37,10 +40,10 @@ public class EmailService : IEmailService
         message.AddTo(destinationAddress);
         message.Subject = subject;
         message.HtmlContent = htmlContent;
-        return await TrySendEmail(message);
+        return await TrySendEmail(message, activity);
     }
 
-    private async Task<bool> TrySendEmail(SendGridMessage message)
+    private async Task<bool> TrySendEmail(SendGridMessage message, Activity? activity)
     {
         try
         {
@@ -57,6 +60,7 @@ public class EmailService : IEmailService
         }
         catch (Exception e)
         {
+            activity?.LogExceptionEvent(nameof(e), e, "TrySendEmail.Fail");
             _logger.LogError($"Failed to send email. Error: {e.Message}");
             return false;
         }

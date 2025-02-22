@@ -2,7 +2,7 @@ using System.Text.Json;
 using EventStore.Client;
 using MassTransit;
 using MediatR;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Domain.Appointments.Events;
 using NHSv2.Messaging.Contracts.MessageContracts;
@@ -30,6 +30,7 @@ public class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand
         using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
 
         var appointmentId = Guid.NewGuid();
+        activity?.AddTag("AppointmentId", appointmentId);
         
         // TODO: - I want to be able to attach NHSv2's appointmentId to this calendar implementation.
         var createdCalendarEvent = await _calendarService.CreateAppointmentAsync(

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Appointments.Application.Appointments.Commands.CreateAppointment;
 using NHSv2.Appointments.Application.Appointments.Queries.GetAppointments;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Services.Contracts;
 using NHSv2.Appointments.Dtos.Requests;
 

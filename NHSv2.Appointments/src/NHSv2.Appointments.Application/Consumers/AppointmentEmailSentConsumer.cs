@@ -2,7 +2,7 @@ using System.Text.Json;
 using EventStore.Client;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Domain.Appointments.Events;
 using NHSv2.Messaging.Contracts.MessageContracts;
 
@@ -22,6 +22,7 @@ public class AppointmentEmailSentConsumer : IConsumer<AppointmentEmailSentContra
     public async Task Consume(ConsumeContext<AppointmentEmailSentContract> context)
     {
         using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
+        activity.AddTag("AppointmentId", context.Message.AppointmentId);
         _logger.LogInformation($"Email confirmed sent for appointment: {context.Message.AppointmentId}");
         
         // This isn't used at all, just cool.

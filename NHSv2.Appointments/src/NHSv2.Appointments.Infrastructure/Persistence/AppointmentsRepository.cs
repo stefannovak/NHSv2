@@ -1,4 +1,4 @@
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Repositories;
 using NHSv2.Appointments.Domain.Appointments;
 using NHSv2.Appointments.Infrastructure.Data;

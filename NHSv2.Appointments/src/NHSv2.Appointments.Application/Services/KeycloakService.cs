@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using NHSv2.Appointments.Application.Configuration;
-using NHSv2.Appointments.Application.Helpers.Helpers;
+using NHSv2.Appointments.Application.Helpers;
 using NHSv2.Appointments.Application.Models;
 using NHSv2.Appointments.Application.Services.Contracts;
 
