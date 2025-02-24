@@ -10,4 +10,6 @@ public class CheckoutProductDto
 
     [Length(3, 3)]
     public string Currency { get; set; } = "GDP";
+
+    public int Quantity { get; set; } = 1;
 }

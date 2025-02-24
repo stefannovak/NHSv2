@@ -18,17 +18,16 @@ public class TransactionService : ITransactionService
     public async Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request)
     {
         var customer = await GetCustomer(request.CustomerEmail);
-        var lineItems = request.Products.Select(x =>
-            new SessionLineItemOptions
+        var lineItems = request.Products.Select(x => new SessionLineItemOptions
         {
             PriceData = new SessionLineItemPriceDataOptions
             {
-                Currency = x.Product.Currency,
+                Currency = x.Currency,
                 ProductData = new SessionLineItemPriceDataProductDataOptions
                 {
-                    Name = x.Product.Name,
+                    Name = x.Name,
                 },
-                UnitAmount = Convert.ToInt64(x.Product.Amount)
+                UnitAmount = Convert.ToInt64(x.Amount)
             },
             Quantity = x.Quantity,
         });
