@@ -1,5 +1,7 @@
+using System.Reflection;
 using NHSv2.Payments.Application;
 using NHSv2.Payments.Application.Configurations;
+using NHSv2.Payments.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "NHSv2.Payments.API", Version = "v1" });
 });
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Load("NHSv2.Payments.Application")));
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
+builder.Services
+    .AddApplicationServices()
+    .AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
 var app = builder.Build();
 

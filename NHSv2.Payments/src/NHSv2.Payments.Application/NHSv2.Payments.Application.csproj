@@ -11,16 +11,30 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\9.0.1\lib\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.Extensions.Options">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.extensions.options\9.0.1\lib\net9.0\Microsoft.Extensions.Options.dll</HintPath>
-      </Reference>
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.7" />
+        <PackageReference Include="MassTransit.Abstractions" Version="8.3.4" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4" />
+        <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Reference Include="EventStore.Client">
+            <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc\23.3.7\lib\net8.0\EventStore.Client.dll</HintPath>
+        </Reference>
+        <Reference Include="EventStore.Client.Streams">
+            <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc.streams\23.3.7\lib\net8.0\EventStore.Client.Streams.dll</HintPath>
+        </Reference>
+        <Reference Include="EventStore.Client.Streams">
+            <HintPath>..\..\..\..\..\..\.nuget\packages\eventstore.client.grpc.streams\23.3.7\lib\net8.0\EventStore.Client.Streams.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Stripe.net" Version="47.4.0-beta.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Payments\Queries\GetAppointments\" />
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Payments.Application.DTOs;
+using NHSv2.Payments.Application.Payments.Commands.CreateCheckout;
 using NHSv2.Payments.Application.Services.Contracts;
 
 namespace NHSv2.Payments.API.Controllers;
@@ -8,19 +10,18 @@ namespace NHSv2.Payments.API.Controllers;
 [Route("[controller]")]
 public class TransactionsController : ControllerBase
 {
-    private readonly ITransactionService _transactionService;
+    private readonly IMediator _mediator;
 
-    public TransactionsController(ITransactionService transactionService)
+    public TransactionsController(IMediator mediator)
     {
-        _transactionService = transactionService;
+        _mediator = mediator;
     }
     
-    [HttpPost]
+    [HttpPost("one-time")]
     public async Task<IActionResult> CreateTransaction([FromBody] CreateCheckoutRequestDto request)
     {
         // ValidationContext stuff
-        
-        var checkoutSession = await _transactionService.CreateCheckoutAsync(request);
+        var checkoutSession = await _mediator.Send(new CreateCheckoutCommand(request));
         
         return Ok(checkoutSession);
     }

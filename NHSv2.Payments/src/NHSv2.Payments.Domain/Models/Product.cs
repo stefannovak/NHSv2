@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace NHSv2.Payments.Application.DTOs;
+namespace NHSv2.Payments.Domain.Models;
 
-public class CheckoutProductDto
+public class Product
 {
     public string Name { get; set; } = string.Empty;
     
