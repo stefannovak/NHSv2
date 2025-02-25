@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NHSv2.Payments.Application.Services.Contracts;
 using Stripe;
 using StripeConfiguration = NHSv2.Payments.Application.Configurations.StripeConfiguration;
 
@@ -10,10 +11,14 @@ namespace NHSv2.Payments.API.Controllers;
 public class WebhookController : ControllerBase
 {
     private readonly IOptions<StripeConfiguration> _options;
+    private readonly IWebhookHandlers _webhookHandlers;
 
-    public WebhookController(IOptions<StripeConfiguration> options)
+    public WebhookController(
+        IOptions<StripeConfiguration> options,
+        IWebhookHandlers webhookHandlers)
     {
         _options = options;
+        _webhookHandlers = webhookHandlers;
     }
     
     [HttpPost]
@@ -26,19 +31,15 @@ public class WebhookController : ControllerBase
                 json,
                 Request.Headers["Stripe-Signature"],
                 _options.Value.WebhookSecret);
-            
-            if (stripeEvent.Type == EventTypes.PaymentIntentSucceeded)
-            {
-                var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-                Console.WriteLine(paymentIntent.Id);
-                // Then define and call a method to handle the successful payment intent.
-                // handlePaymentIntentSucceeded(paymentIntent);
-            }
-            else
-            {
-                Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
-            }
 
+            switch (stripeEvent.Type)
+            {
+                case EventTypes.PaymentIntentSucceeded:
+                    await _webhookHandlers.HandlePaymentIntentSucceeded((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+            }
+            
+            Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
             return Ok();
         }
         catch (Exception e)
