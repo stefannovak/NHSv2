@@ -16,7 +16,7 @@ public class TransactionService : ITransactionService
         Stripe.StripeConfiguration.ApiKey = options.Value.ApiKey;
     }
     
-    public async Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request, Guid transactionId)
+    public async Task<CheckoutSessionResponseDto> CreateCheckoutAsync(CreateCheckoutRequestDto request, Guid transactionId)
     {
         var customer = await GetCustomer(request.CustomerEmail);
         
@@ -37,7 +37,7 @@ public class TransactionService : ITransactionService
         var sessionService = new SessionService();
         var session = await sessionService.CreateAsync(checkout);
         Console.WriteLine(session.Url);
-        return new CheckoutResponse(transactionId, session.Url);
+        return new CheckoutSessionResponseDto(transactionId, session.Url, customer.Id);
     }
 
     private static List<SessionLineItemOptions> CreateLineItems(CreateCheckoutRequestDto request)

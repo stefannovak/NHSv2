@@ -11,5 +11,5 @@ public interface ITransactionService
     /// <param name="request"></param>
     /// <param name="transactionId"></param>
     /// <returns>TransactionId and a redirect URL.</returns>
-    Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request, Guid transactionId);
+    Task<CheckoutSessionResponseDto> CreateCheckoutAsync(CreateCheckoutRequestDto request, Guid transactionId);
 }

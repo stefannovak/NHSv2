@@ -2,6 +2,8 @@ using EventStore.Client;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using NHSv2.Payments.Application.Helpers;
+using NHSv2.Payments.Application.Services.Contracts;
+using NHSv2.Payments.Infrastructure.EventStore;
 using OpenTelemetry.Trace;
 
 namespace NHSv2.Payments.Infrastructure;
@@ -33,6 +35,7 @@ public static class ServiceCollectionExtensions
         var settings = EventStoreClientSettings.Create(connectionString);
         var eventStoreClient = new EventStoreClient(settings);
         serviceCollection.AddSingleton(eventStoreClient);
+        serviceCollection.AddSingleton<IEventStoreService, EventStoreService>();
         return serviceCollection;
     }
     

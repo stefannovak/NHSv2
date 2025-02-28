@@ -1,28 +1,29 @@
+using System.Text.Json;
 using EventStore.Client;
 using MediatR;
 using NHSv2.Payments.Application.DTOs.Responses;
 using NHSv2.Payments.Application.Services.Contracts;
 using NHSv2.Payments.Domain.Products;
 using NHSv2.Payments.Domain.Transactions;
+using NHSv2.Payments.Domain.Transactions.Payments.Events;
 
 namespace NHSv2.Payments.Application.Payments.Commands.CreateCheckout;
 
-public class CreateCheckoutHandler: IRequestHandler<CreateCheckoutCommand, CheckoutResponse>
+public class CreateCheckoutHandler: IRequestHandler<CreateCheckoutCommand, CheckoutResponseDto>
 {
     private readonly ITransactionService _transactionService;
-    private readonly EventStoreClient _eventStoreClient;
+    private readonly IEventStoreService _eventStoreService;
 
     public CreateCheckoutHandler(
         ITransactionService transactionService,
-        EventStoreClient eventStoreClient)
+        IEventStoreService eventStoreService)
     {
         _transactionService = transactionService;
-        _eventStoreClient = eventStoreClient;
+        _eventStoreService = eventStoreService;
     }
 
-    public async Task<CheckoutResponse> Handle(CreateCheckoutCommand request, CancellationToken cancellationToken)
+    public async Task<CheckoutResponseDto> Handle(CreateCheckoutCommand request, CancellationToken cancellationToken)
     {
-        // var totalAmount = request.CheckoutRequest.Products.Sum(x => x.Price * x.Quantity);
 
         // var products = new List<Product>();
         // foreach (var product in request.CheckoutRequest.Products)
@@ -44,22 +45,15 @@ public class CreateCheckoutHandler: IRequestHandler<CreateCheckoutCommand, Check
         var payments = Payment.CreatePaymentsFromProducts(products);
         var checkoutSession = await _transactionService.CreateCheckoutAsync(request.CheckoutRequest, payments.transactionId);
         
-        // await AddCheckoutSessionToEventStore(payments, transactionId);
-        
-        //
-        // var checkoutCreatedEvent = new TransactionCreated(newTransaction.TransactionId, request.CheckoutRequest.Products);
-        // var eventData = new EventData(
-        //     Uuid.FromGuid(newTransaction.TransactionId),
-        //     nameof(CreateCheckoutCommand),
-        //     JsonSerializer.SerializeToUtf8Bytes(checkoutCreatedEvent));
-        //     
-        // await _eventStoreClient.AppendToStreamAsync(
-        //     "payments",
-        //     StreamState.Any,
-        //     new[] { eventData, },
-        //     cancellationToken: cancellationToken
-        // );
+        var totalAmount = request.CheckoutRequest.Products.Sum(x => x.Price * x.Quantity);
+        var paymentCreatedEvent = new PaymentCreatedEvent(
+            payments.transactionId,
+            totalAmount,
+            request.CheckoutRequest.Products.Select(x => x.Currency).First(),
+            checkoutSession.CustomerId,
+            products);
 
-        return checkoutSession;
+        await _eventStoreService.AppendPaymentCreatedEventAsync(paymentCreatedEvent, cancellationToken);
+        return new CheckoutResponseDto(checkoutSession.TransactionId, checkoutSession.RedirectUrl);
     }
 }
