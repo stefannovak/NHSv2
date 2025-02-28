@@ -14,7 +14,12 @@ public class WebhookHandlers : IWebhookHandlers
     {
         _eventStoreClient = eventStoreClient;
     }
-    
+
+    public Task HandlePaymentIntentCreated(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task HandlePaymentIntentSucceeded(PaymentIntent paymentIntent)
     {
         var transactionConfirmedEvent = new TransactionConfirmedEvent(paymentIntent.Id);
@@ -28,5 +33,30 @@ public class WebhookHandlers : IWebhookHandlers
             StreamState.Any,
             new[] { eventData }
         );
+    }
+
+    public Task HandlePaymentIntentPartiallyFunded(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task HandlePaymentIntentPaymentFailed(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task HandlePaymentProcessing(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task HandlePaymentIntentRequiresAction(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task HandlePaymentIntentCanceled(PaymentIntent paymentIntent)
+    {
+        throw new NotImplementedException();
     }
 }
