@@ -28,9 +28,12 @@ public class TransactionService : ITransactionService
             SuccessUrl = request.RedirectUrl,
             CancelUrl = request.ReturnUrl,
             Customer = customer.Id,
-            Metadata = new Dictionary<string, string>
+            PaymentIntentData = new SessionPaymentIntentDataOptions
             {
-                {"transactionId", transactionId.ToString()}
+                Metadata = new Dictionary<string, string>
+                {
+                    {"transactionId", transactionId.ToString()}
+                }
             }
         };
         
@@ -51,7 +54,7 @@ public class TransactionService : ITransactionService
                 {
                     Name = x.Name,
                 },
-                UnitAmount = Convert.ToInt64(x.Price)
+                UnitAmountDecimal = x.PriceInLowestDenominator
             },
             Quantity = x.Quantity,
         }).ToList();

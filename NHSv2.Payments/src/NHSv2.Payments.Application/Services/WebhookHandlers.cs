@@ -1,21 +1,31 @@
 using EventStore.Client;
 using NHSv2.Payments.Application.Services.Contracts;
+using NHSv2.Payments.Domain.Transactions.Payments.Events.Stripe;
 using Stripe;
 
 namespace NHSv2.Payments.Application.Services;
 
 public class WebhookHandlers : IWebhookHandlers
 {
-    private readonly EventStoreClient _eventStoreClient;
+    private readonly IEventStoreService _eventStoreService;
 
-    public WebhookHandlers(EventStoreClient eventStoreClient)
+    public WebhookHandlers(IEventStoreService eventStoreService)
     {
-        _eventStoreClient = eventStoreClient;
+        _eventStoreService = eventStoreService;
     }
 
-    public Task HandlePaymentIntentCreated(PaymentIntent paymentIntent)
+    public async Task HandlePaymentIntentCreated(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentCreatedEvent = new PaymentIntentCreatedEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        await _eventStoreService.AppendPaymentIntentCreatedEventAsync(paymentCreatedEvent);
     }
 
     public async Task HandlePaymentIntentSucceeded(PaymentIntent paymentIntent)
@@ -56,5 +66,18 @@ public class WebhookHandlers : IWebhookHandlers
     public Task HandlePaymentIntentCanceled(PaymentIntent paymentIntent)
     {
         throw new NotImplementedException();
+    }
+
+    private Guid GetTransactionIdFromEvent(IHasMetadata eventData)
+    {
+        try
+        {
+            return Guid.Parse(eventData.Metadata["transactionId"]);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Could not parse transactionId from event", e);
+            throw;
+        }
     }
 }

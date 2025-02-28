@@ -25,27 +25,27 @@ public class CreateCheckoutHandler: IRequestHandler<CreateCheckoutCommand, Check
     public async Task<CheckoutResponseDto> Handle(CreateCheckoutCommand request, CancellationToken cancellationToken)
     {
 
-        // var products = new List<Product>();
-        // foreach (var product in request.CheckoutRequest.Products)
-        // {
-        //     for (int i = 0; i < product.Quantity; i++)
-        //     {
-        //         // We'd get the productId from metadata or a products microservice before the checkout is made.
-        //         var productId = Guid.NewGuid();
-        //         products.Add(new Product(productId, product.Name, product.Price));
-        //     }
-        // }
+        var products = new List<Product>();
+        foreach (var product in request.CheckoutRequest.Products)
+        {
+            for (int i = 0; i < product.Quantity; i++)
+            {
+                // We'd get the productId from metadata or a products microservice before the checkout is made.
+                var productId = Guid.NewGuid();
+                products.Add(new Product(productId, product.Name, product.PriceInLowestDenominator));
+            }
+        }
         
         // We'd get the productId from metadata or a products microservice before the checkout is made.
-        var products = request.CheckoutRequest.Products
-            .SelectMany(product => Enumerable.Range(0, product.Quantity)
-                .Select(_ => new Product(Guid.NewGuid(), product.Name, product.Price)))
-            .ToList();
+        // var products = request.CheckoutRequest.Products
+        //     .SelectMany(product => Enumerable.Range(0, product.Quantity)
+        //         .Select(_ => new Product(Guid.NewGuid(), product.Name, product.PriceInLowestDenominator)))
+        //     .ToList();
         
         var payments = Payment.CreatePaymentsFromProducts(products);
         var checkoutSession = await _transactionService.CreateCheckoutAsync(request.CheckoutRequest, payments.transactionId);
         
-        var totalAmount = request.CheckoutRequest.Products.Sum(x => x.Price * x.Quantity);
+        var totalAmount = request.CheckoutRequest.Products.Sum(x => x.PriceInLowestDenominator * x.Quantity);
         var paymentCreatedEvent = new PaymentCreatedEvent(
             payments.transactionId,
             totalAmount,

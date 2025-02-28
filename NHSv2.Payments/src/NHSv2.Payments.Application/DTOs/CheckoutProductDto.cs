@@ -6,7 +6,7 @@ public class CheckoutProductDto
 
     public string Currency { get; set; } = "GBP";
     
-    public decimal Price { get; set; }
+    public int PriceInLowestDenominator { get; set; }
 
     public int Quantity { get; set; } = 1;
 }

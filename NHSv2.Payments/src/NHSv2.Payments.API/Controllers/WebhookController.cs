@@ -34,6 +34,9 @@ public class WebhookController : ControllerBase
 
             switch (stripeEvent.Type)
             {
+                case EventTypes.PaymentIntentCreated:
+                    await _webhookHandlers.HandlePaymentIntentCreated((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
                 case EventTypes.PaymentIntentSucceeded:
                     await _webhookHandlers.HandlePaymentIntentSucceeded((stripeEvent.Data.Object as PaymentIntent)!); 
                     break;
