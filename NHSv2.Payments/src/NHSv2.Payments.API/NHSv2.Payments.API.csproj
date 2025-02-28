@@ -10,4 +10,11 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\NHSv2.Payments\src\NHSv2.Payments.Application\NHSv2.Payments.Application.csproj" />
+      <ProjectReference Include="..\..\..\NHSv2.Payments\src\NHSv2.Payments.Infrastructure\NHSv2.Payments.Infrastructure.csproj" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
+    </ItemGroup>
+
 </Project>

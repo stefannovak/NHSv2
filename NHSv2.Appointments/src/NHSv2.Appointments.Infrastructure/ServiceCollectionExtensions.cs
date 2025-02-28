@@ -63,7 +63,7 @@ public static class ServiceCollectionExtensions
         services.AddDbContext<AppointmentsDbContext>(options =>
         {
             options.UseSqlServer(connectionString);
-        }, ServiceLifetime.Singleton);
+        }, ServiceLifetime.Singleton); // TODO: - Figure out these lifetimes
         
         services.AddSingleton<IAppointmentsRepository, AppointmentsRepository>();
         services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
