@@ -16,10 +16,8 @@ public class TransactionService : ITransactionService
         Stripe.StripeConfiguration.ApiKey = options.Value.ApiKey;
     }
     
-    public async Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request)
+    public async Task<CheckoutResponse> CreateCheckoutAsync(CreateCheckoutRequestDto request, Guid transactionId)
     {
-        var totalAmount = request.Products.Sum(x => x.Amount * x.Quantity);
-        var newTransaction = Transaction.CreateTransaction(totalAmount, TransactionType.OneTimePayment);
         var customer = await GetCustomer(request.CustomerEmail);
         
         var checkout = new SessionCreateOptions
@@ -30,15 +28,16 @@ public class TransactionService : ITransactionService
             SuccessUrl = request.RedirectUrl,
             CancelUrl = request.ReturnUrl,
             Customer = customer.Id,
+            Metadata = new Dictionary<string, string>
+            {
+                {"transactionId", transactionId.ToString()}
+            }
         };
         
         var sessionService = new SessionService();
         var session = await sessionService.CreateAsync(checkout);
-        
-        // On a successful session creation, commit a new transaction to the event store.
-
         Console.WriteLine(session.Url);
-        return new CheckoutResponse(newTransaction.TransactionId, session.Url);
+        return new CheckoutResponse(transactionId, session.Url);
     }
 
     private static List<SessionLineItemOptions> CreateLineItems(CreateCheckoutRequestDto request)
@@ -52,7 +51,7 @@ public class TransactionService : ITransactionService
                 {
                     Name = x.Name,
                 },
-                UnitAmount = Convert.ToInt64(x.Amount)
+                UnitAmount = Convert.ToInt64(x.Price)
             },
             Quantity = x.Quantity,
         }).ToList();

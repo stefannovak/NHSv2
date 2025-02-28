@@ -4,7 +4,7 @@ namespace NHSv2.Payments.Domain.Transactions.Payments.Events;
 
 public record PaymentCreatedEvent(
     Guid TransactionId, 
-    decimal Amount,
+    decimal TotalAmount,
     string Currency, 
     string CustomerId, 
     IReadOnlyCollection<Product> Products);
