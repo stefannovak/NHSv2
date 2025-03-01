@@ -39,7 +39,7 @@ public class Payment : Transaction
     /// </summary>
     /// <param name="products"></param>
     /// <returns></returns>
-    public static (IList<Payment>, Guid transactionId) CreatePaymentsFromProducts(IList<Product> products)
+    public static (IList<Payment> payments, Guid transactionId) CreatePaymentsFromProducts(IEnumerable<Product> products)
     {
         var transactionId = Guid.NewGuid();
         return (products.Select(product => new Payment(product, transactionId)).ToList(), transactionId);
