@@ -30,17 +30,16 @@ public class WebhookHandlers : IWebhookHandlers
 
     public async Task HandlePaymentIntentSucceeded(PaymentIntent paymentIntent)
     {
-        // var transactionConfirmedEvent = new TransactionConfirmedEvent(paymentIntent.Id);
-        // var eventData = new EventStore.Client.EventData(
-        //     Uuid.NewUuid(),
-        //     nameof(TransactionConfirmedEvent),
-        //     JsonSerializer.SerializeToUtf8Bytes(transactionConfirmedEvent));
-        //
-        // await _eventStoreClient.AppendToStreamAsync(
-        //     "payments",
-        //     StreamState.Any,
-        //     new[] { eventData }
-        // );
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentSucceededEvent = new PaymentIntentSucceededEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        await _eventStoreService.AppendPaymentIntentSucceededEventAsync(paymentIntentSucceededEvent);
     }
 
     public Task HandlePaymentIntentPartiallyFunded(PaymentIntent paymentIntent)

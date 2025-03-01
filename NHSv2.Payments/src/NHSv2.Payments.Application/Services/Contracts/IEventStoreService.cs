@@ -17,6 +17,31 @@ public interface IEventStoreService
         CancellationToken cancellationToken = new());
     
     Task<IWriteResult> AppendPaymentIntentCreatedEventAsync(
-        PaymentIntentCreatedEvent paymentIntentCreatedEvent,
+        PaymentIntentCreatedEvent piEvent,
         CancellationToken cancellationToken = new());
+    
+    Task<IWriteResult> AppendPaymentIntentSucceededEventAsync(
+        PaymentIntentSucceededEvent piEvent,
+        CancellationToken cancellationToken = new());
+    
+    Task<IWriteResult> AppendPaymentIntentCanceledEventAsync(
+        PaymentIntentCanceledEvent piEvent,
+        CancellationToken cancellationToken = new());
+
+    Task<IWriteResult> AppendPaymentIntentPartiallyFundedEventAsync(
+        PaymentIntentPartiallyFundedEvent piEvent,
+        CancellationToken cancellationToken = new());
+
+    Task<IWriteResult> AppendPaymentIntentPaymentFailedEventAsync(
+        PaymentIntentPaymentFailedEvent piEvent,
+        CancellationToken cancellationToken = new());
+
+    Task<IWriteResult> AppendPaymentIntentProcessingEventAsync(
+        PaymentIntentProcessingEvent piEvent,
+        CancellationToken cancellationToken = new());
+
+    Task<IWriteResult> AppendPaymentIntentRequiresActionEventAsync(
+        PaymentIntentRequiresActionEvent piEvent,
+        CancellationToken cancellationToken = new());
+
 }
