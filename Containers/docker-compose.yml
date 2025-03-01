@@ -20,7 +20,7 @@ services:
         RABBITMQ_DEFAULT_PASS: admin
         RABBITMQ_LOAD_DEFINITIONS: /etc/rabbitmq/definitions.json
     volumes:
-      - ./rabbit_7f7213c4f545_2025-2-7.json:/opt/definitions.json:ro
+      - ./rabbit_7b8ecb1de850_2025-3-1.json:/opt/definitions.json:ro
       - ./rabbitmq.config:/etc/rabbitmq/rabbitmq.config:ro
     networks:
       - keycloak_network
@@ -100,6 +100,17 @@ services:
       - SA_PASSWORD=Password123!
     ports:
       - "1433:1433"
+    user: "10001"
+    restart: unless-stopped
+    
+  transactions.db.reads:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql_server_transactions
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+    ports:
+      - "1434:1433"
     user: "10001"
     restart: unless-stopped
       

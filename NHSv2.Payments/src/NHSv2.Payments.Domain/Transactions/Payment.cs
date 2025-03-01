@@ -8,6 +8,11 @@ namespace NHSv2.Payments.Domain.Transactions;
 public class Payment : Transaction
 {
     public Guid ProductId { get; set; }
+
+    // EF Core requires a parameterless constructor
+    public Payment()
+    {
+    }
     
     public Payment(Product product)
     {

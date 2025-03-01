@@ -23,6 +23,8 @@ builder.Services
     .AddApplicationServices()
     .AddEventStore(builder.Configuration.GetValue<string>("EventStore:ConnectionString")!);
 
+builder.Services.AddPaymentsDbContext(builder.Configuration.GetValue<string>("SqlServer:ConnectionString")!);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
