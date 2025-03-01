@@ -12,10 +12,20 @@ public class TransactionsDbContext : DbContext
     }
     
     public DbSet<Payment> Payments { get; set; }
+
+    public DbSet<PaymentsEventStoreCheckpoint> Checkpoints { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Payment>().HasKey(x => x.Id);
+        
+        modelBuilder.Entity<Payment>()
+            .Property(p => p.Status)
+            .HasConversion<string>();  // 
+        
+        modelBuilder.Entity<Payment>()
+            .Property(p => p.Type)
+            .HasConversion<string>();  // 
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())

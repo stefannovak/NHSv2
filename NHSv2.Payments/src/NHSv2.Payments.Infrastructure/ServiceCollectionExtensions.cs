@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
         }, ServiceLifetime.Singleton);
         
         services.AddSingleton<IPaymentsRepository, PaymentsRepository>();
-        // services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
+        services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
         return services;
     }
     
@@ -63,7 +63,7 @@ public static class ServiceCollectionExtensions
         }, ServiceLifetime.Singleton); // TODO: - Figure out these lifetimes
         
         services.AddSingleton<IPaymentsRepository, PaymentsRepository>();
-        // services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
+        services.AddSingleton<IEventStoreCheckpointRepository, EventStoreCheckpointRepository>();
         return services;
     }
     

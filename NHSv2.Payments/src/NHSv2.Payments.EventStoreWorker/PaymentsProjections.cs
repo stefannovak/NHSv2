@@ -13,31 +13,30 @@ public class PaymentsProjections : BackgroundService
     private readonly ILogger<PaymentsProjections> _logger;
     private readonly EventStoreClient _eventStoreClient;
     private readonly IPaymentsRepository _paymentsRepository;
-    // private readonly IEventStoreCheckpointRepository _checkpointRepository;
+    private readonly IEventStoreCheckpointRepository _checkpointRepository;
     // private readonly IDistributedCache _cache;
-    private const string StreamName = "Payments";
+    private const string StreamName = "$ce-payments";
     
     public PaymentsProjections(
         ILogger<PaymentsProjections> logger,
         EventStoreClient eventStoreClient,
-        IPaymentsRepository paymentsRepository
-        // IEventStoreCheckpointRepository checkpointRepository,
+        IPaymentsRepository paymentsRepository,
+        IEventStoreCheckpointRepository checkpointRepository
         // IDistributedCache cache)
         )
     {
         _logger = logger;
         _eventStoreClient = eventStoreClient;
         _paymentsRepository = paymentsRepository;
-        // _checkpointRepository = checkpointRepository;
+        _checkpointRepository = checkpointRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // var checkpoint = await _checkpointRepository.GetCheckpoint(StreamName);
-        var checkpoint = 0;
+        var checkpoint = await _checkpointRepository.GetCheckpoint(StreamName);
         
         await using var subscription = _eventStoreClient.SubscribeToStream(
-            "$ce-payments",
+            StreamName,
             FromStream.After(new StreamPosition(Convert.ToUInt32(checkpoint))),
             resolveLinkTos: true,
             cancellationToken: stoppingToken);
@@ -60,7 +59,7 @@ public class PaymentsProjections : BackgroundService
                 break;
         }
         
-        // await _checkpointRepository.IncrementCheckpoint(StreamName);
+        await _checkpointRepository.IncrementCheckpoint(StreamName);
     }
     
     private async Task HandlePaymentCreated(ResolvedEvent evnt)
