@@ -31,24 +31,50 @@ public class EventStoreService : IEventStoreService
         );
     }
 
-    public async Task<IWriteResult> AppendPaymentIntentCreatedEventAsync(
-        PaymentIntentCreatedEvent paymentIntentCreatedEvent,
-        CancellationToken cancellationToken = new CancellationToken())
+    public Task<IWriteResult> AppendPaymentIntentCreatedEventAsync(
+        PaymentIntentCreatedEvent piEvent,
+        CancellationToken cancellationToken = new ())
     {
-        var eventData = new EventData(
-            Uuid.NewUuid(),
-            nameof(PaymentIntentCreatedEvent),
-            JsonSerializer.SerializeToUtf8Bytes(paymentIntentCreatedEvent));
-        
-        return await _eventStoreClient.AppendToStreamAsync(
-            GetPaymentsStreamName(paymentIntentCreatedEvent.TransactionId),
-            StreamState.Any,
-            new[] { eventData },
-            cancellationToken: cancellationToken
-        );
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
     }
 
-    public async Task<IWriteResult> AppendPaymentIntentEvent(
+    public Task<IWriteResult> AppendPaymentIntentSucceededEventAsync(PaymentIntentSucceededEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    public Task<IWriteResult> AppendPaymentIntentCanceledEventAsync(PaymentIntentCanceledEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    public Task<IWriteResult> AppendPaymentIntentPartiallyFundedEventAsync(PaymentIntentPartiallyFundedEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    public Task<IWriteResult> AppendPaymentIntentPaymentFailedEventAsync(PaymentIntentPaymentFailedEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    public Task<IWriteResult> AppendPaymentIntentProcessingEventAsync(PaymentIntentProcessingEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    public Task<IWriteResult> AppendPaymentIntentRequiresActionEventAsync(PaymentIntentRequiresActionEvent piEvent,
+        CancellationToken cancellationToken = new ())
+    {
+        return AppendPaymentIntentEvent(piEvent, cancellationToken);
+    }
+
+    private async Task<IWriteResult> AppendPaymentIntentEvent(
         PaymentIntentBaseEvent baseEvent,
         CancellationToken cancellationToken)
     {

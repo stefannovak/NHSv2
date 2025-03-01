@@ -1,4 +1,3 @@
-using EventStore.Client;
 using NHSv2.Payments.Application.Services.Contracts;
 using NHSv2.Payments.Domain.Transactions.Payments.Events.Stripe;
 using Stripe;
@@ -14,7 +13,7 @@ public class WebhookHandlers : IWebhookHandlers
         _eventStoreService = eventStoreService;
     }
 
-    public async Task HandlePaymentIntentCreated(PaymentIntent paymentIntent)
+    public Task HandlePaymentIntentCreated(PaymentIntent paymentIntent)
     {
         var transactionId = GetTransactionIdFromEvent(paymentIntent);
         var paymentCreatedEvent = new PaymentIntentCreatedEvent(
@@ -25,47 +24,91 @@ public class WebhookHandlers : IWebhookHandlers
             paymentIntent.Status,
             paymentIntent.CustomerId);
         
-        await _eventStoreService.AppendPaymentIntentCreatedEventAsync(paymentCreatedEvent);
+        return _eventStoreService.AppendPaymentIntentCreatedEventAsync(paymentCreatedEvent);
     }
 
-    public async Task HandlePaymentIntentSucceeded(PaymentIntent paymentIntent)
+    public Task HandlePaymentIntentSucceeded(PaymentIntent paymentIntent)
     {
-        // var transactionConfirmedEvent = new TransactionConfirmedEvent(paymentIntent.Id);
-        // var eventData = new EventStore.Client.EventData(
-        //     Uuid.NewUuid(),
-        //     nameof(TransactionConfirmedEvent),
-        //     JsonSerializer.SerializeToUtf8Bytes(transactionConfirmedEvent));
-        //
-        // await _eventStoreClient.AppendToStreamAsync(
-        //     "payments",
-        //     StreamState.Any,
-        //     new[] { eventData }
-        // );
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentSucceededEvent = new PaymentIntentSucceededEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentSucceededEventAsync(paymentIntentSucceededEvent);
     }
 
     public Task HandlePaymentIntentPartiallyFunded(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentPartiallyFundedEvent = new PaymentIntentPartiallyFundedEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentPartiallyFundedEventAsync(paymentIntentPartiallyFundedEvent);
     }
 
     public Task HandlePaymentIntentPaymentFailed(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentPaymentFailedEvent = new PaymentIntentPaymentFailedEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentPaymentFailedEventAsync(paymentIntentPaymentFailedEvent);
     }
 
     public Task HandlePaymentProcessing(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentProcessingEvent = new PaymentIntentProcessingEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentProcessingEventAsync(paymentIntentProcessingEvent);
     }
 
     public Task HandlePaymentIntentRequiresAction(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentRequiresActionEvent = new PaymentIntentRequiresActionEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentRequiresActionEventAsync(paymentIntentRequiresActionEvent);
     }
 
     public Task HandlePaymentIntentCanceled(PaymentIntent paymentIntent)
     {
-        throw new NotImplementedException();
+        var transactionId = GetTransactionIdFromEvent(paymentIntent);
+        var paymentIntentCanceledEvent = new PaymentIntentCanceledEvent(
+            transactionId,
+            paymentIntent.Id,
+            paymentIntent.Amount,
+            paymentIntent.Currency,
+            paymentIntent.Status,
+            paymentIntent.CustomerId);
+        
+        return _eventStoreService.AppendPaymentIntentCanceledEventAsync(paymentIntentCanceledEvent);
     }
 
     private Guid GetTransactionIdFromEvent(IHasMetadata eventData)

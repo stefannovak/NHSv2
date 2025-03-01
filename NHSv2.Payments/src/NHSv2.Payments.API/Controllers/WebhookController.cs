@@ -40,9 +40,27 @@ public class WebhookController : ControllerBase
                 case EventTypes.PaymentIntentSucceeded:
                     await _webhookHandlers.HandlePaymentIntentSucceeded((stripeEvent.Data.Object as PaymentIntent)!); 
                     break;
+                case EventTypes.PaymentIntentCanceled:
+                    await _webhookHandlers.HandlePaymentIntentCanceled((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+                case EventTypes.PaymentIntentPartiallyFunded:
+                    await _webhookHandlers.HandlePaymentIntentPartiallyFunded((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+                case EventTypes.PaymentIntentPaymentFailed:
+                    await _webhookHandlers.HandlePaymentIntentPaymentFailed((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+                case EventTypes.PaymentIntentProcessing:
+                    await _webhookHandlers.HandlePaymentProcessing((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+                case EventTypes.PaymentIntentRequiresAction:
+                    await _webhookHandlers.HandlePaymentIntentRequiresAction((stripeEvent.Data.Object as PaymentIntent)!); 
+                    break;
+                
+                default:
+                    Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                    break;
             }
             
-            Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
             return Ok();
         }
         catch (Exception e)
