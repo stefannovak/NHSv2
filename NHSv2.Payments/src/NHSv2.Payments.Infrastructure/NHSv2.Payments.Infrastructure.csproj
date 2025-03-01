@@ -43,4 +43,8 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.11.0" />
         <PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.11.0-beta.1" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Data\Migrations\" />
+    </ItemGroup>
 </Project>
