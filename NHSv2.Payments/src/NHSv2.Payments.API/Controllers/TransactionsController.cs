@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NHSv2.Payments.Application.DTOs;
 using NHSv2.Payments.Application.Payments.Commands.CreateCheckout;
-using NHSv2.Payments.Application.Services.Contracts;
+using NHSv2.Payments.Application.Payments.Queries.GetPaymentsByTransactionId;
 
 namespace NHSv2.Payments.API.Controllers;
 
@@ -24,5 +24,12 @@ public class TransactionsController : ControllerBase
         var checkoutSession = await _mediator.Send(new CreateCheckoutCommand(request));
         
         return Ok(checkoutSession);
+    }
+    
+    [HttpGet("{transactionId}/payments")]
+    public async Task<IActionResult> GetPaymentsByTransactionId(Guid transactionId)
+    {
+        var payments = await _mediator.Send(new GetPaymentsByTransactionIdQuery(transactionId));
+        return Ok(payments);
     }
 }
