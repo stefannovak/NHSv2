@@ -56,6 +56,42 @@
       "RouteClaimsRequirement": {
         "roles": ["doctor"]
       }
+    },
+    {
+      "UpstreamPathTemplate": "/api/transactions/one-time",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/transactions/one-time",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5008
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/transactions/{transactionId}/payments",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamPathTemplate": "/api/transactions/{transactionId}/payments",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5008
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/stripe/webhooks",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamPathTemplate": "/api/stripe/webhooks",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5008
+        }
+      ]
     }
   ]
 }
