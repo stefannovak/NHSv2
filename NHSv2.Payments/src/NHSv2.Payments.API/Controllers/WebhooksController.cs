@@ -7,13 +7,13 @@ using StripeConfiguration = NHSv2.Payments.Application.Configurations.StripeConf
 namespace NHSv2.Payments.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class WebhookController : ControllerBase
+[Route("api/stripe/[controller]")]
+public class WebhooksController : ControllerBase
 {
     private readonly IOptions<StripeConfiguration> _options;
     private readonly IWebhookHandlers _webhookHandlers;
 
-    public WebhookController(
+    public WebhooksController(
         IOptions<StripeConfiguration> options,
         IWebhookHandlers webhookHandlers)
     {

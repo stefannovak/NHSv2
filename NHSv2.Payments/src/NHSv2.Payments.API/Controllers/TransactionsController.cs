@@ -7,7 +7,7 @@ using NHSv2.Payments.Application.Payments.Queries.GetPaymentsByTransactionId;
 namespace NHSv2.Payments.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class TransactionsController : ControllerBase
 {
     private readonly IMediator _mediator;
