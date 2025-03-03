@@ -6,4 +6,5 @@ public enum TransactionStatus
     Success,
     Failed,
     RequiresAction,
+    Canceled,
 }

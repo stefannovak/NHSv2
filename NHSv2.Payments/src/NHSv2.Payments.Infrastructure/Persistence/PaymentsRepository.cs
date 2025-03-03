@@ -26,4 +26,16 @@ public class PaymentsRepository : IPaymentsRepository
         using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
         return _context.Payments.Where(predicate);
     }
+
+    public IEnumerable<Payment> GetPayments(Guid transactionId)
+    {
+        return _context.Payments.Where(x => x.TransactionId == transactionId);
+    }
+
+    public async Task UpdateAsync(Payment payment)
+    {
+        using var activity = ActivitySourceHelper.ActivitySource.StartActivity();
+        _context.Payments.Update(payment);
+        await _context.SaveChangesAsync();
+    }
 }
