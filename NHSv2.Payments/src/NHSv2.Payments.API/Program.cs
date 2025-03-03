@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using NHSv2.Payments.Application;
 using NHSv2.Payments.Application.Configurations;
 using NHSv2.Payments.Infrastructure;
@@ -7,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddOpenApi();
 builder.Services.Configure<StripeConfiguration>(builder.Configuration.GetSection(StripeConfiguration.Stripe));
 builder.Services.AddSwaggerGen(c =>
