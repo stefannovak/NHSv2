@@ -17,4 +17,18 @@ public interface IPaymentsRepository
     /// <param name="predicate"></param>
     /// <returns></returns>
     IEnumerable<Payment> GetPayments(Func<Payment, bool> predicate);
+    
+    /// <summary>
+    /// Get payments by transaction ID.
+    /// </summary>
+    /// <param name="transactionId"></param>
+    /// <returns></returns>
+    IEnumerable<Payment> GetPayments(Guid transactionId);
+    
+    /// <summary>
+    /// Update a payment in the Payments table.
+    /// </summary>
+    /// <param name="payment"></param>
+    /// <returns></returns>
+    Task UpdateAsync(Payment payment);
 }
