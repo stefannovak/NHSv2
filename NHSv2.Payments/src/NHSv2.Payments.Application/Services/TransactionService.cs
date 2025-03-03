@@ -1,8 +1,9 @@
 using Microsoft.Extensions.Options;
 using NHSv2.Payments.Application.DTOs;
+using NHSv2.Payments.Application.DTOs.Generic;
 using NHSv2.Payments.Application.DTOs.Responses;
+using NHSv2.Payments.Application.Repositories;
 using NHSv2.Payments.Application.Services.Contracts;
-using NHSv2.Payments.Domain.Transactions;
 using Stripe;
 using Stripe.Checkout;
 using StripeConfiguration = NHSv2.Payments.Application.Configurations.StripeConfiguration;
@@ -11,8 +12,13 @@ namespace NHSv2.Payments.Application.Services;
 
 public class TransactionService : ITransactionService
 {
-    public TransactionService(IOptions<StripeConfiguration> options)
+    private readonly IPaymentsRepository _paymentsRepository;
+
+    public TransactionService(
+        IOptions<StripeConfiguration> options,
+        IPaymentsRepository paymentsRepository)
     {
+        _paymentsRepository = paymentsRepository;
         Stripe.StripeConfiguration.ApiKey = options.Value.ApiKey;
     }
     
@@ -41,6 +47,19 @@ public class TransactionService : ITransactionService
         var session = await sessionService.CreateAsync(checkout);
         Console.WriteLine(session.Url);
         return new CheckoutSessionResponseDto(transactionId, session.Url, customer.Id);
+    }
+
+    public async Task<IReadOnlyCollection<TransactionDto>> GetPaymentsByTransactionId(Guid transactionId)
+    {
+        var payments = _paymentsRepository.GetPayments(x => x.TransactionId == transactionId);
+        return payments.Select(x => new TransactionDto(
+            x.TransactionId,
+            x.Status,
+            x.Amount,
+            x.ProductId,
+            x.CreatedAt,
+            x.UpdatedAt))
+            .ToList();
     }
 
     private static List<SessionLineItemOptions> CreateLineItems(CreateCheckoutRequestDto request)
