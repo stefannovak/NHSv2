@@ -16,7 +16,7 @@ There is so much more work I could have done, I spent weekends and nights buildi
 The glaringly bad practices, like keys in source committed `appsettings.json`, hard coded credentials in the `docker-compose.yml`, are because this project is intentionally not meant for production.
 This also explains the complete lack of tests, as I spent half my days writing tests at work, I don't fancy writing them at 10pm on a Thursday night for a project that won't get used.
 
-
+### Archived as I work on this project done, in terms of proving my knowledge of modern .NET development.
 
 ## Project Structure
 
