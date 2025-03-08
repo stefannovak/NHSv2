@@ -1,6 +1,5 @@
 using System.Text.Json;
 using EventStore.Client;
-using Microsoft.Extensions.Caching.Distributed;
 using NHSv2.Payments.Application.Helpers;
 using NHSv2.Payments.Application.Repositories;
 using NHSv2.Payments.Domain.Transactions;
@@ -11,22 +10,16 @@ namespace NHSv2.Payments.EventStoreWorker;
 
 public class PaymentsProjections : BackgroundService
 {
-    private readonly ILogger<PaymentsProjections> _logger;
     private readonly EventStoreClient _eventStoreClient;
     private readonly IPaymentsRepository _paymentsRepository;
     private readonly IEventStoreCheckpointRepository _checkpointRepository;
-    // private readonly IDistributedCache _cache;
     private const string StreamName = "$ce-payments";
     
     public PaymentsProjections(
-        ILogger<PaymentsProjections> logger,
         EventStoreClient eventStoreClient,
         IPaymentsRepository paymentsRepository,
-        IEventStoreCheckpointRepository checkpointRepository
-        // IDistributedCache cache)
-        )
+        IEventStoreCheckpointRepository checkpointRepository)
     {
-        _logger = logger;
         _eventStoreClient = eventStoreClient;
         _paymentsRepository = paymentsRepository;
         _checkpointRepository = checkpointRepository;

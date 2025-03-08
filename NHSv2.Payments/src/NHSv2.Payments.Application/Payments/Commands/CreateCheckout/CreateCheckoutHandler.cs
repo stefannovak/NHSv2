@@ -36,12 +36,6 @@ public class CreateCheckoutHandler: IRequestHandler<CreateCheckoutCommand, Check
             }
         }
         
-        // We'd get the productId from metadata or a products microservice before the checkout is made.
-        // var products = request.CheckoutRequest.Products
-        //     .SelectMany(product => Enumerable.Range(0, product.Quantity)
-        //         .Select(_ => new Product(Guid.NewGuid(), product.Name, product.PriceInLowestDenominator)))
-        //     .ToList();
-        
         var payments = Payment.CreatePaymentsFromProducts(products);
         var checkoutSession = await _transactionService.CreateCheckoutAsync(request.CheckoutRequest, payments.transactionId);
         
